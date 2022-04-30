@@ -1,0 +1,38 @@
+.Common{
+    padding: 26px;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    &:first-child{
+        margin-bottom: 20px;
+    }
+
+    .title{
+        color: var(--title-darkblue);
+
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 44px;
+    }
+
+    .btn-add{
+        width: 80px;
+        height: 30px;
+
+        align-items: flex-end;
+    }
+
+    .table{
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 5px;
+
+        th, td{
+            border: 1px solid ;
+            
+        }
+    }
+}
