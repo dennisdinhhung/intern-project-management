@@ -1,12 +1,14 @@
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase-config';
 
 import '../static/css/Login.scss'
 
 function Login() {
 
-  const [login, setLogin] = useState({
+  const [loginInfo, setLoginInfo] = useState({
     username: '',
     password: ''
   });
@@ -18,12 +20,34 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setLogin({
+    //TODO: basic input field auth
+
+    login();
+
+    //TODO: if account incorrect, return
+
+    
+
+    setLoginInfo({
       username: '',
       password: ''
     })
 
     redirect('/home')
+  }
+
+  const login = async () => {
+    try {
+      const user = await signInWithEmailAndPassword(
+        auth,
+        loginInfo.username,
+        loginInfo.password
+      )
+      console.log(user)
+    }
+    catch (error){
+      console.log(error.message)
+    }
   }
 
   return (
@@ -38,16 +62,16 @@ function Login() {
               type="text" 
               placeholder='Username'
               onChange={(e) => {
-                setLogin({...login, username: e.target.value})}}
-              value={login.username}/>
+                setLoginInfo({...loginInfo, username: e.target.value})}}
+              value={loginInfo.username}/>
             
             <input 
               type="text" 
               placeholder='Password'
               onChange={(e) => {
-                setLogin({...login, password: e.target.value})
+                setLoginInfo({...loginInfo, password: e.target.value})
               }}
-              value={login.password}/>
+              value={loginInfo.password}/>
 
             <div className='error-login'>{errorLogin}</div>
 
