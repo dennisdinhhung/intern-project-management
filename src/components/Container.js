@@ -13,6 +13,10 @@ import MngProject from './management/MngProject'
 import NavBar from './NavBar'
 import OutLetContainer from '../OutLetContainer'
 import Home from './Home'
+import AddPrjType from './add_category/AddPrjType'
+import AddPrjStatus from './add_category/AddPrjStatus'
+import AddTechStack from './add_category/AddTechStack'
+import AddCustomerGroup from './add_category/AddCustomerGroup'
 
 function Container() {
   return (
@@ -30,6 +34,11 @@ function Container() {
           <Route path='project-status' element={<PrjStatus/>}/>
           <Route path='project-techstack' element={<PrjTechStack/>}/>
           <Route path='customer-group' element={<CustomerGroup/>}/>
+
+          <Route path='project-type/add' element={<AddPrjType/>}/>
+          <Route path='project-status/add' element={<AddPrjStatus/>}/>
+          <Route path='project-techstack/add' element={<AddTechStack/>}/>
+          <Route path='customer-group/add' element={<AddCustomerGroup/>}/>
 
           <Route path='manage-department' element={<MngDepartment/>}/>
           <Route path='manage-employee' element={<MngEmployee/>}/>

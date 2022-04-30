@@ -29,7 +29,7 @@ function Menu() {
         <div className="btn-prj-type">
           <button
             className=''
-            onClick={() => { redirect('/home/project-type') }}
+            onClick={() => { redirect('project-type') }}
           >
             <div>
               Project Type
@@ -40,7 +40,7 @@ function Menu() {
         <div className="btn-prj-status">
           <button
             className=''
-            onClick={() => { redirect('/home/project-status') }}
+            onClick={() => { redirect('project-status') }}
           >
             <div>
               Project Status
@@ -51,10 +51,10 @@ function Menu() {
         <div className="btn-prj-techstack">
           <button
             className=''
-          onClick={() => {redirect('/home/project-techstack')}}
+          onClick={() => {redirect('project-techstack')}}
           >
             <div>
-              Project Tech Stack
+              Tech Stack
             </div>
           </button>
         </div>
@@ -62,7 +62,7 @@ function Menu() {
         <div className="btn-customer-group">
           <button
             className=''
-            onClick={() => { redirect('/home/customer-group') }}
+            onClick={() => { redirect('customer-group') }}
           >
             <div>
               Customer Group
@@ -79,7 +79,7 @@ function Menu() {
         <div className="btn-mng-dep">
           <button
             className=''
-            onClick={() => { redirect('/home/manage-department') }}
+            onClick={() => { redirect('manage-department') }}
           >
             <div>
               Manage Department
@@ -90,7 +90,7 @@ function Menu() {
         <div className="btn-mng-employee">
           <button
             className=''
-            onClick={() => { redirect('/home/manage-employee') }}
+            onClick={() => { redirect('manage-employee') }}
           >
             <div>
               Manage Employee
@@ -101,7 +101,7 @@ function Menu() {
         <div className="btn-mng-project">
           <button
             className=''
-            onClick={() => { redirect('/home/manage-project') }}
+            onClick={() => { redirect('manage-project') }}
           >
             <div>
               Manage Project
