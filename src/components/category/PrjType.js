@@ -7,6 +7,7 @@ import '../../static/css/OutletCommonChild.scss'
 
 import { db } from '../../utils/firebase-config';
 import { collection, getDocs } from "firebase/firestore"
+
 function PrjType() {
 
     const [users, setUsers] = useState([]);
@@ -21,7 +22,7 @@ function PrjType() {
         }
 
         getUsers();
-    }, [usersCollectionRef])
+    }, [])
 
     return (
         <div className='ProjectType Common'>
@@ -49,7 +50,17 @@ function PrjType() {
                 </thead>
 
                 <tbody>
-                    {/* map this */}
+                    {
+                        users.map((user, index) => (
+                            <tr key={index}>
+                                <td>{++index}</td>
+                                <td>{user.name}</td>
+                                <td>{user.description}</td>
+                                <td>{user.priority}</td>
+                                <td>{user.status}</td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </div>
