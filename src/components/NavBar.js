@@ -2,9 +2,10 @@ import { async } from '@firebase/util';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React from 'react'
 import { useState } from 'react'
-import { auth } from '../firebase-config'
+import { auth } from '../utils/firebase-config'
 import { useNavigate } from 'react-router-dom'
 import '../static/css/NavBar.scss'
+import { useAuth } from '../utils/AuthProvider';
 
 function NavBar() {
 
@@ -12,19 +13,26 @@ function NavBar() {
 
   const redirect = useNavigate();
 
+  const {authUser, logout } = useAuth();
+
+  const [test, setTest] = useState();
+
   //remember the current loged in user
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser)
-  })
+  // onAuthStateChanged(auth, (currentUser) => {
+  //   setUser(currentUser)
+  // })
 
-  const logout = async () => {
-    await signOut(auth)
-  }
+  // const logout = async () => {
+  //   await signOut(auth)
+  // }
 
-  const handleLogOut = () => {
-    logout();
-
-    redirect('/')
+  const handleLogOut = async () => {
+    try{
+      await logout();
+      redirect('/')
+    }catch{
+      console.log('Failed to log out')
+    }
   }
 
   return (
@@ -38,7 +46,7 @@ function NavBar() {
         <div className="div-user-menu">
             <img src="" alt="" />
             <div className="username">
-              {user?.email}
+              {authUser?.email}
             </div>
         </div>
 

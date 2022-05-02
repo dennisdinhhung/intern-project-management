@@ -1,10 +1,11 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import React from 'react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase-config';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { auth } from '../utils/firebase-config';
 
 import '../static/css/Login.scss'
+import { useAuth } from '../utils/AuthProvider';
 
 function Login() {
 
@@ -17,36 +18,33 @@ function Login() {
 
   const redirect = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const { authUser, login } = useAuth();
 
-    //TODO: basic input field auth
-
-    login();
-
-    //TODO: if account incorrect, return
-
-    
-
-    setLoginInfo({
-      username: '',
-      password: ''
-    })
-
-    redirect('/home')
+  if (authUser){
+    return <Navigate to='/home'/>
   }
 
-  const login = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const user = await signInWithEmailAndPassword(
-        auth,
-        loginInfo.username,
-        loginInfo.password
-      )
-      console.log(user)
+      //TODO: basic input field auth
+
+      //ruins the login function
+      await login(loginInfo);
+
+      //TODO: if account incorrect, return
+
+      setLoginInfo({
+        username: '',
+        password: ''
+      })
+
+      console.log('redirect')
+      redirect('/home')
     }
-    catch (error){
-      console.log(error.message)
+    catch(error){
+      setErrorLogin('Your username or password is incorrect.')
     }
   }
 

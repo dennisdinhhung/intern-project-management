@@ -1,11 +1,27 @@
 import React from 'react'
+import { useEffect } from 'react';
+import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 
 import '../../static/css/OutletCommonChild.scss'
 
+import { db } from '../../utils/firebase-config';
+import { collection, getDocs } from "firebase/firestore"
 function PrjType() {
 
+    const [users, setUsers] = useState([]);
+    const usersCollectionRef = collection(db, "PrjType");
+
     const redirect = useNavigate();
+
+    useEffect(() => {
+        const getUsers = async () => {
+            const data = await getDocs(usersCollectionRef);
+            setUsers(data.docs.map((doc) => ({...doc.data()})))
+        }
+
+        getUsers();
+    }, [usersCollectionRef])
 
     return (
         <div className='ProjectType Common'>
