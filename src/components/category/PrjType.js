@@ -1,11 +1,13 @@
+import { deleteDoc, doc } from 'firebase/firestore';
 import React, { useReducer } from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 
 import '../../static/css/OutletCommonChild.scss'
+import { db } from '../../utils/firebase-config';
 
-function PrjType({state, parentOnEditClick}) {
+function PrjType({state, parentOnEditClick, afterChanges}) {
 
     const [checkboxList, setCheckboxList] = useState([]);
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -76,6 +78,20 @@ function PrjType({state, parentOnEditClick}) {
         }
     }
 
+    const handleDelete = () => {
+        //delete all entry that was selected
+
+        const delList = checkboxList;
+
+        delList.map((id) => {
+            const itemDoc = doc(db, 'PrjType', id);
+            console.log(itemDoc)
+            deleteDoc(itemDoc)
+        })
+
+        afterChanges()
+    }
+
     return (
         <div className='ProjectType Common'>
             <div className="title">
@@ -143,7 +159,8 @@ function PrjType({state, parentOnEditClick}) {
                     Edit
                 </button>
 
-                <button>
+                <button
+                    onClick={handleDelete}>
                     Delete
                 </button>
             </div>

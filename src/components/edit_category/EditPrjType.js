@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firebase-config';
 
-function EditPrjType({state, parentEditSubmit}) {
+function EditPrjType({state, afterChanges}) {
     
     const [addType, setAddType] = useState({
         name: '',
@@ -26,9 +26,11 @@ function EditPrjType({state, parentEditSubmit}) {
 
         //get the specific prjType doc
         const editDoc = doc(db, 'PrjType', addType.id)
+        const updatedType = addType
+        delete updatedType.id
         //update info onto firebase
         await updateDoc(editDoc, addType)
-        parentEditSubmit()
+        afterChanges()
         
         setAddType({
             name: '',

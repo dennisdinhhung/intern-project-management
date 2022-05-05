@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firebase-config';
 
-function AddPrjType() {
+function AddPrjType({afterChanges}) {
     
     const [addType, setAddType] = useState({
         name: '',
@@ -28,6 +28,8 @@ function AddPrjType() {
             priority: '',
             status: ''
         })
+
+        afterChanges()
 
         redirect('/home/project-type')
     }

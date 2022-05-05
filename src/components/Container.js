@@ -46,7 +46,7 @@ function Container() {
     setEditTypeState(row)
   }
 
-  const afterEditSubmit = () => {
+  const afterChanges = () => {
     getPrjType(dispatch);
   }
 
@@ -66,12 +66,15 @@ function Container() {
             <Route path='project-type' element={
               <PrjType 
                 state={prjTypeState}
-                parentOnEditClick={handleParentEditClick}/>} />
-            <Route path='project-type/add' element={<AddPrjType />} />
+                parentOnEditClick={handleParentEditClick}
+                afterChanges={afterChanges}/>} />
+            <Route path='project-type/add' element={
+              <AddPrjType 
+              afterChanges={afterChanges}/>} />
             <Route path='project-type/edit' element={
               <EditPrjType 
                 state={editTypeState}
-                parentEditSubmit={afterEditSubmit}/>} />
+                afterChanges={afterChanges}/>} />
 
 
             <Route path='project-status' element={<PrjStatus />} />
