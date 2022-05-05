@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import firebase from 'firebase/app'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './Login'
@@ -32,11 +32,23 @@ function Container() {
 
   useEffect(() => {
     getPrjType(dispatch);
-    console.log('useEffect dispatch');
-  }, [dispatch])
-  
-  const [editTypeState, dispatchEditType] = useReducer();
+  }, [])
 
+  const [editTypeState, setEditTypeState] = useState({
+    name: '',
+    description: '',
+    priority: '',
+    status: ''
+  });
+
+  const handleParentEditClick = (row) => {
+    console.log(row, 1)
+    setEditTypeState(row)
+  }
+
+  const afterEditSubmit = () => {
+    getPrjType(dispatch);
+  }
 
   return (
     <AuthProvider>
@@ -50,17 +62,28 @@ function Container() {
             </RequireAuth>
           }>
             <Route index element={<Home />} />
-            <Route path='project-type' element={<PrjType state={prjTypeState}/>} />
+
+            <Route path='project-type' element={
+              <PrjType 
+                state={prjTypeState}
+                parentOnEditClick={handleParentEditClick}/>} />
+            <Route path='project-type/add' element={<AddPrjType />} />
+            <Route path='project-type/edit' element={
+              <EditPrjType 
+                state={editTypeState}
+                parentEditSubmit={afterEditSubmit}/>} />
+
+
             <Route path='project-status' element={<PrjStatus />} />
             <Route path='project-techstack' element={<PrjTechStack />} />
             <Route path='customer-group' element={<CustomerGroup />} />
 
-            <Route path='project-type/add' element={<AddPrjType />} />
+            
             <Route path='project-status/add' element={<AddPrjStatus />} />
             <Route path='project-techstack/add' element={<AddTechStack />} />
             <Route path='customer-group/add' element={<AddCustomerGroup />} />
 
-            <Route path='project-type/edit' element={<EditPrjType state={editTypeState}/>} />
+            
             
 
             <Route path='manage-department' element={<MngDepartment />} />

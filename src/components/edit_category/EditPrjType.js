@@ -1,10 +1,10 @@
 import { async } from '@firebase/util';
-import { addDoc, collection } from 'firebase/firestore';
-import React, { useState } from 'react'
+import { addDoc, collection, updateDoc, doc } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firebase-config';
 
-function AddPrjType({editState}) {
+function EditPrjType({state, parentEditSubmit}) {
     
     const [addType, setAddType] = useState({
         name: '',
@@ -12,6 +12,10 @@ function AddPrjType({editState}) {
         priority: '',
         status: ''
     })
+    
+    useEffect(() => {
+        setAddType(state)
+    }, [state])
 
     const redirect = useNavigate();
     
@@ -20,7 +24,11 @@ function AddPrjType({editState}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await addDoc(usersCollectionRef, addType)
+        //get the specific prjType doc
+        const editDoc = doc(db, 'PrjType', addType.id)
+        //update info onto firebase
+        await updateDoc(editDoc, addType)
+        parentEditSubmit()
         
         setAddType({
             name: '',
@@ -40,6 +48,12 @@ function AddPrjType({editState}) {
             </div>
 
             <form action="">
+                {/* testing */}
+                <div>
+                    {addType.id}
+                </div>
+
+
                 <div>Name</div>
                 <input 
                     type="text" 
@@ -83,11 +97,11 @@ function AddPrjType({editState}) {
                 <button 
                     className='btn-add-prj'
                     onClick={handleSubmit}>
-                    Add
+                    Edit
                 </button>
             </form>
         </div>
     )
 }
 
-export default AddPrjType
+export default EditPrjType
