@@ -1,28 +1,68 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 
 import '../../static/css/OutletCommonChild.scss'
 
-import { db } from '../../utils/firebase-config';
-import { collection, getDocs } from "firebase/firestore"
+function PrjType({state}) {
 
-function PrjType() {
+    const [checkboxList, setCheckboxList] = useState([]);
+    const [isCheckAll, setIsCheckAll] = useState(false);
 
-    const [users, setUsers] = useState([]);
-    const usersCollectionRef = collection(db, "PrjType");
+    const { prjTypeData } = state
 
     const redirect = useNavigate();
 
     useEffect(() => {
-        const getUsers = async () => {
-            const data = await getDocs(usersCollectionRef);
-            setUsers(data.docs.map((doc) => ({...doc.data()})))
-        }
+        
+    }, [checkboxList.length])
 
-        getUsers();
-    }, [])
+    const handleCheckAll = () => {
+        // gather all id of the table
+        // add id into a list
+        // have the checkbox check if the its id is in the list
+            //if yes, checked
+            //if not, unchecked
+        
+        if (!isCheckAll){
+
+            const newList = [];
+            
+            prjTypeData.map((item) => (
+                newList.push(item.id)
+            ))
+
+            setIsCheckAll(true)
+            setCheckboxList(newList)
+        }
+        else{
+            setIsCheckAll(false)
+
+            const newList = []
+            setCheckboxList(newList)
+        }
+    }
+
+    const handleCheckbox = (id) => {
+        //check if the id is in the list
+        const isChecked = checkboxList.includes(id);
+        const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
+        setCheckboxList(checkboxListUpdate)
+
+        if (prjTypeData.length === checkboxList.length){
+            setIsCheckAll(true)
+            console.log(isCheckAll, 1)
+        }
+        else if (prjTypeData.length !== checkboxList.length || checkboxList.length === 0){
+            setIsCheckAll(false)
+            console.log(isCheckAll, 2)
+        }
+    }
+
+    const handleEdit = () => {
+        redirect('edit')
+    }
 
     return (
         <div className='ProjectType Common'>
@@ -41,7 +81,13 @@ function PrjType() {
             <table className='table'>
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>
+                            <input 
+                                type="checkbox"
+                                value={isCheckAll}
+                                onClick={handleCheckAll}/>
+                                
+                        </th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Priority</th>
@@ -51,18 +97,40 @@ function PrjType() {
 
                 <tbody>
                     {
-                        users.map((user, index) => (
+                        prjTypeData.map((row, index) => (
                             <tr key={index}>
-                                <td>{++index}</td>
-                                <td>{user.name}</td>
-                                <td>{user.description}</td>
-                                <td>{user.priority}</td>
-                                <td>{user.status}</td>
+                                <td>
+                                    <input 
+                                        type="checkbox"
+                                        value={row.id}
+                                        checked={checkboxList.includes(row.id)}
+                                        onChange={() => handleCheckbox(row.id)}
+                                        />
+                                    {
+                                        //! testing purposes
+                                    }
+                                    {row.id}
+                                </td>
+                                <td>{row.name}</td>
+                                <td>{row.description}</td>
+                                <td>{row.priority}</td>
+                                <td>{row.status}</td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
+
+            <div className="div-btns">
+                <button
+                    onClick={handleEdit}>
+                    Edit
+                </button>
+
+                <button>
+                    Delete
+                </button>
+            </div>
         </div>
     )
 }

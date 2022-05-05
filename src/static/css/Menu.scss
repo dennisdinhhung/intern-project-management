@@ -6,9 +6,31 @@
 
     padding-top: 30px;
 
+    .title-category{
+        padding-left: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+
+        margin-bottom: 10px;
+
+        background-color: var(--selected-grey);
+
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+
+        color: var(--font-darkgrey);
+    }
+
+    .title-management{
+        margin-left: 20px;
+        margin-bottom: 10px;
+    }
+
     button{
         width: 200px;
-        height: 40px;
+        height: 36px;
+
         margin-left: 20px;
         margin-right: 24px;
         margin-bottom: 20px;

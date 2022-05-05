@@ -2,6 +2,8 @@ import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
 import '../static/css/Menu.scss'
 
+import {BsHouseDoorFill, BsChevronDown} from 'react-icons/bs'
+
 function Menu() {
   const redirect = useNavigate();
 
@@ -17,7 +19,8 @@ function Menu() {
           <button
             className='btn-home'
             onClick={() => { redirect('/home') }}>
-            Home
+              <BsHouseDoorFill className='menu-icon'/>
+              Home
           </button>
         </div>
 

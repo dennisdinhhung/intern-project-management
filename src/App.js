@@ -5,9 +5,9 @@ import Provider from './context/provider';
 function App() {
   return (
     <div className="App">
-      <Provider>
-        <Container />
-      </Provider>
+
+      <Container />
+
     </div>
   );
 }

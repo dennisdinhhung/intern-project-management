@@ -17,10 +17,27 @@ import AddPrjType from './add_category/AddPrjType'
 import AddPrjStatus from './add_category/AddPrjStatus'
 import AddTechStack from './add_category/AddTechStack'
 import AddCustomerGroup from './add_category/AddCustomerGroup'
+import EditPrjType from './edit_category/EditPrjType'
 import { AuthProvider } from '../utils/AuthProvider'
 import { RequireAuth } from '../utils/RequireAuth'
+import { useEffect } from 'react'
+
+import PrjTypeReducer, { initialState } from '../reducer/PrjTypeReducer';
+import { useReducer } from 'react'
+import { getPrjType, setPrjTypeData } from '../reducer/action'
 
 function Container() {
+
+  const [prjTypeState, dispatch] = useReducer(PrjTypeReducer, initialState);
+
+  useEffect(() => {
+    getPrjType(dispatch);
+    console.log('useEffect dispatch');
+  }, [dispatch])
+  
+  const [editTypeState, dispatchEditType] = useReducer();
+
+
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -33,7 +50,7 @@ function Container() {
             </RequireAuth>
           }>
             <Route index element={<Home />} />
-            <Route path='project-type' element={<PrjType />} />
+            <Route path='project-type' element={<PrjType state={prjTypeState}/>} />
             <Route path='project-status' element={<PrjStatus />} />
             <Route path='project-techstack' element={<PrjTechStack />} />
             <Route path='customer-group' element={<CustomerGroup />} />
@@ -42,6 +59,9 @@ function Container() {
             <Route path='project-status/add' element={<AddPrjStatus />} />
             <Route path='project-techstack/add' element={<AddTechStack />} />
             <Route path='customer-group/add' element={<AddCustomerGroup />} />
+
+            <Route path='project-type/edit' element={<EditPrjType state={editTypeState}/>} />
+            
 
             <Route path='manage-department' element={<MngDepartment />} />
             <Route path='manage-employee' element={<MngEmployee />} />

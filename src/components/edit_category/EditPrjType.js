@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../utils/firebase-config';
 
-function AddPrjType() {
+function AddPrjType({editState}) {
     
     const [addType, setAddType] = useState({
         name: '',
@@ -15,12 +15,12 @@ function AddPrjType() {
 
     const redirect = useNavigate();
     
-    const prjtypeCollectionRef = collection(db, "PrjType");
+    const usersCollectionRef = collection(db, "PrjType");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await addDoc(prjtypeCollectionRef, addType)
+        await addDoc(usersCollectionRef, addType)
         
         setAddType({
             name: '',
@@ -36,7 +36,7 @@ function AddPrjType() {
     return (
         <div className='AddProjectType Common'>
             <div className="title">
-                Add Project Type
+                Edit Project Type
             </div>
 
             <form action="">

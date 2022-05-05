@@ -1,30 +1,51 @@
-import { async } from '@firebase/util';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React from 'react'
 import { useState } from 'react'
-import { auth } from '../utils/firebase-config'
 import { useNavigate } from 'react-router-dom'
 import '../static/css/NavBar.scss'
 import { useAuth } from '../utils/AuthProvider';
 
+import {BsFillCaretDownFill, BsChevronDown} from 'react-icons/bs'
+
 function NavBar() {
 
-  const [user, setUser] = useState({});
+  const [dropDown, setDropDown] = useState(false);
 
   const redirect = useNavigate();
 
+  const { authUser} = useAuth();
+
+  return (
+    <div className='NavBar'>
+        <div className="title-navbar">
+            NotJira
+        </div>
+
+        <input 
+          type="text" 
+          className='input-search'
+          placeholder='Search'/>
+
+        <button
+          className="div-user-menu"
+          onClick={() => setDropDown(!dropDown)}>
+            <img src="" alt="" />
+            <div className="username">
+              {authUser?.email}
+            </div>
+
+            <BsChevronDown className='icon-chevron'/>
+
+            {dropDown && <ProfileDropDown/>}
+        </button>
+
+        
+    </div>
+  )
+}
+
+function ProfileDropDown() {
+  const redirect = useNavigate();
   const {authUser, logout } = useAuth();
-
-  const [test, setTest] = useState();
-
-  //remember the current loged in user
-  // onAuthStateChanged(auth, (currentUser) => {
-  //   setUser(currentUser)
-  // })
-
-  // const logout = async () => {
-  //   await signOut(auth)
-  // }
 
   const handleLogOut = async () => {
     try{
@@ -35,24 +56,15 @@ function NavBar() {
     }
   }
 
-  return (
-    <div className='NavBar'>
-        <div className="title-navbar">
-            NotJira
-        </div>
+  return(
+    <div className='profile-drop-down'>
+      <button>
+        My Profile
+      </button>
 
-        <input type="text" placeholder='Search'/>
-
-        <div className="div-user-menu">
-            <img src="" alt="" />
-            <div className="username">
-              {authUser?.email}
-            </div>
-        </div>
-
-        <button
-        onClick={handleLogOut}>
-          Log Out
+      <button
+          onClick={handleLogOut}>
+            Log Out
         </button>
     </div>
   )
