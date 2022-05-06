@@ -3,7 +3,7 @@ import Context from './context'
 import reducer, {initialState} from '../reducer/reducer'
 import { useReducer } from 'react'
 
-function Provider({ children }) {
+function MainProvider({ children }) {
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -14,4 +14,4 @@ function Provider({ children }) {
   )
 }
 
-export default Provider
+export default MainProvider

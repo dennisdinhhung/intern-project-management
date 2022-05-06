@@ -1,28 +1,42 @@
 import { ACTIONS } from "./action"
 
 export const initialState = {
-    users: localStorage.getItem('intern') ? JSON.parse(localStorage.getItem('intern')) : [],
-    user: {
-        id: '',
-        prj_name: '',
-        prj_desc: '',
-        prj_priority: '',
-        prj_status: '',
-        prj_staus_desc: '',
-        prj_tech_stack: '',
-        customer_name: '',
-        customer_desc: '',
-        customer_priority: '',
-        customer_status: '' /*do i need this one?*/
-    }
+    prjTypeState: {
+        name: '',
+        description: '',
+        priority: '',
+        status: ''
+    },
+    prjStatusState: {
+        name: '',
+        description: '',
+        status: ''
+    },
+    prjTypeData: [],
+    prjStatusData: [],
 }
 
 const reducer = (state, action) => {
-    switch (action.type){
-        case ACTIONS.SET_STATE_INFO:
+    switch (action.type) {
+        case ACTIONS.SET_PRJTYPE:
             return {
-                ...state, 
-                user: action.payload
+                ...state,
+                prjTypeState: action.payload
+            }
+        case ACTIONS.SET_PRJSTATUS:
+            return {
+                ...state,
+                prjStatusState: action.payload
+            }
+        case ACTIONS.SET_PRJTYPE_DATA:
+            return {
+                ...state,
+                prjTypeData: action.payload
+            }
+        case ACTIONS.SET_PRJSTATUS_DATA:
+            return {
+                ...state,
+                prjStatusData: action.payload
             }
         default:
             return state

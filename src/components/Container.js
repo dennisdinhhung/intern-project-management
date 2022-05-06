@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import firebase from 'firebase/app'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './Login'
@@ -21,33 +21,46 @@ import EditPrjType from './edit_category/EditPrjType'
 import { AuthProvider } from '../utils/AuthProvider'
 import { RequireAuth } from '../utils/RequireAuth'
 import { useEffect } from 'react'
-
-import PrjTypeReducer, { initialState } from '../reducer/PrjTypeReducer';
-import { useReducer } from 'react'
-import { getPrjType, setPrjTypeData } from '../reducer/action'
+import { setPrjStatusData, setPrjTypeData } from '../reducer/action'
+import EditPrjStatus from './edit_category/EditPrjStatus'
+import Context from '../context/context'
+import { collection, doc, getDocs } from "firebase/firestore"
+import { db } from "../utils/firebase-config"
 
 function Container() {
 
-  const [prjTypeState, dispatch] = useReducer(PrjTypeReducer, initialState);
+  const [state, dispatch] = useContext(Context);
+  const { prjTypeState, prjStatusState } = state
 
+  //common
   useEffect(() => {
-    getPrjType(dispatch);
+    getPrjType();
+    getPrjStatus()
   }, [])
 
-  const [editTypeState, setEditTypeState] = useState({
-    name: '',
-    description: '',
-    priority: '',
-    status: ''
-  });
+  const getPrjType = async () => {
+    const prjtypeCollectionRef = collection(db, "PrjType");
+    const data = await getDocs(prjtypeCollectionRef);
+    const prjTypeData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-  const handleParentEditClick = (row) => {
-    console.log(row, 1)
-    setEditTypeState(row)
+    dispatch(setPrjTypeData(prjTypeData))
   }
 
-  const afterChanges = () => {
-    getPrjType(dispatch);
+  const getPrjStatus = async () => {
+    const prjstatusCollectionRef = collection(db, "PrjStatus");
+    const data = await getDocs(prjstatusCollectionRef);
+    const prjStatusData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    
+    dispatch(setPrjStatusData(prjStatusData))
+  }
+
+  //common
+  const afterChangesPrjType = () => {
+    getPrjType();
+  }
+
+  const afterChangesPrjStatus = () => {
+    getPrjStatus()
   }
 
   return (
@@ -63,31 +76,44 @@ function Container() {
           }>
             <Route index element={<Home />} />
 
+            {//* PROJECT-TYPE
+            }
             <Route path='project-type' element={
-              <PrjType 
-                state={prjTypeState}
-                parentOnEditClick={handleParentEditClick}
-                afterChanges={afterChanges}/>} />
+              <PrjType
+                afterChanges={afterChangesPrjType} />} />
+
             <Route path='project-type/add' element={
-              <AddPrjType 
-              afterChanges={afterChanges}/>} />
+              <AddPrjType
+                afterChanges={afterChangesPrjType} />} />
+
             <Route path='project-type/edit' element={
-              <EditPrjType 
-                state={editTypeState}
-                afterChanges={afterChanges}/>} />
+              <EditPrjType
+                afterChanges={afterChangesPrjType} />} />
 
 
-            <Route path='project-status' element={<PrjStatus />} />
+            {//* PROJECT-STATUS
+            }
+            <Route path='project-status' element={
+              <PrjStatus
+                afterChanges={afterChangesPrjStatus} />} />
+
+            <Route path='project-status/add' element={
+              <AddPrjStatus
+                afterChanges={afterChangesPrjStatus} />} />
+
+            <Route path='project-status/edit' element={
+              <EditPrjStatus
+                afterChanges={afterChangesPrjStatus} />
+            } />
+
             <Route path='project-techstack' element={<PrjTechStack />} />
             <Route path='customer-group' element={<CustomerGroup />} />
 
-            
-            <Route path='project-status/add' element={<AddPrjStatus />} />
             <Route path='project-techstack/add' element={<AddTechStack />} />
             <Route path='customer-group/add' element={<AddCustomerGroup />} />
 
-            
-            
+
+
 
             <Route path='manage-department' element={<MngDepartment />} />
             <Route path='manage-employee' element={<MngEmployee />} />

@@ -1,42 +1,45 @@
-import { addDoc, collection } from 'firebase/firestore';
-import React, { useContext, useState } from 'react'
+import { async } from '@firebase/util';
+import { addDoc, collection, updateDoc, doc } from 'firebase/firestore';
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
-import { setPrjType } from '../../reducer/action';
+import { setPrjStatus } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
-function AddPrjType({afterChanges}) {
+function EditPrjStatus({ afterChanges }) {
 
     const [state, dispatch] = useContext(Context)
-
-    const { prjTypeState } = state
+    const { prjStatusState } = state
 
     const redirect = useNavigate();
-
-    const prjtypeCollectionRef = collection(db, "PrjType");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await addDoc(prjtypeCollectionRef, prjTypeState)
-        
-        dispatch(setPrjType({
-            name: '',
-            description: '',
-            priority: '',
-            status: ''
-        }))
-
+        //get the specific prjType doc
+        const editDoc = doc(db, 'PrjStatus', prjStatusState.id)
+        const updated = prjStatusState
+        delete updated.id
+        //update info onto firebase
+        await updateDoc(editDoc, updated)
         afterChanges()
 
-        redirect('/home/project-type')
+        dispatch(
+            setPrjStatus({
+                name: '',
+                description: '',
+                status: ''
+            })
+        )
+
+        redirect('/home/project-status')
     }
 
 
     return (
         <div className='AddProjectType Common'>
             <div className="title">
-                Add Project Type
+                Edit Project Type
             </div>
 
             <form action="">
@@ -44,11 +47,11 @@ function AddPrjType({afterChanges}) {
                 <input
                     type="text"
                     className='input-name'
-                    value={prjTypeState.name}
+                    value={prjStatusState.name}
                     onChange={(e) => {
                         dispatch(
-                            setPrjType({ 
-                                ...prjTypeState, 
+                            setPrjStatus({ 
+                                ...prjStatusState, 
                                 name: e.target.value }))
                     }} />
 
@@ -56,27 +59,18 @@ function AddPrjType({afterChanges}) {
                 <input
                     type="text"
                     className='input-desc'
-                    value={prjTypeState.description}
+                    value={prjStatusState.description}
                     onChange={(e) => {
-                        dispatch(setPrjType({ ...prjTypeState, description: e.target.value }))
-                    }} />
-
-                <div>Priority Number</div>
-                <input
-                    type='number'
-                    className='input-priority'
-                    value={prjTypeState.priority}
-                    onChange={(e) => {
-                        dispatch(setPrjType({ ...prjTypeState, priority: e.target.value }))
+                        dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
                     }} />
 
                 <div>Status</div>
                 <select
                     name=""
                     id=""
-                    value={prjTypeState.status}
+                    value={prjStatusState.status}
                     onChange={(e) => {
-                        dispatch(setPrjType({ ...prjTypeState, status: e.target.value }))
+                        dispatch(setPrjStatus({ ...prjStatusState, status: e.target.value }))
                     }}>
                     <option value="" disabled>Choose the status</option>
                     <option value="ACTIVE">ACTIVE</option>
@@ -86,11 +80,11 @@ function AddPrjType({afterChanges}) {
                 <button
                     className='btn-add-prj'
                     onClick={handleSubmit}>
-                    Add
+                    Edit
                 </button>
             </form>
         </div>
     )
 }
 
-export default AddPrjType
+export default EditPrjStatus

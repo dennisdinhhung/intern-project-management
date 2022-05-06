@@ -1,13 +1,18 @@
 import { deleteDoc, doc } from 'firebase/firestore';
-import React, { useReducer } from 'react'
+import React, { useContext, useReducer } from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
-
-import '../../static/css/OutletCommonChild.scss'
 import { db } from '../../utils/firebase-config';
 
-function PrjType({state, parentOnEditClick, afterChanges}) {
+import '../../static/css/OutletCommonChild.scss'
+import Context from '../../context/context';
+import { setPrjStatus, setPrjType } from '../../reducer/action';
+
+
+function PrjType({afterChanges}) {
+    
+    const [state, dispatch] = useContext(Context);
 
     const [checkboxList, setCheckboxList] = useState([]);
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -69,7 +74,7 @@ function PrjType({state, parentOnEditClick, afterChanges}) {
         if (checkboxList.length === 1){
             const selectedID = checkboxList[0];
             const row = prjTypeData.filter(item => item.id === selectedID)
-            parentOnEditClick(row[0]);
+            dispatch(setPrjType(row[0]))
             redirect('edit')
         }
         else{
@@ -83,9 +88,8 @@ function PrjType({state, parentOnEditClick, afterChanges}) {
 
         const delList = checkboxList;
 
-        delList.map((id) => {
+        delList.forEach((id) => {
             const itemDoc = doc(db, 'PrjType', id);
-            console.log(itemDoc)
             deleteDoc(itemDoc)
         })
 

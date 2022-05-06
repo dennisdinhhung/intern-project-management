@@ -1,26 +1,29 @@
 import { collection, doc, getDocs } from "firebase/firestore"
 import { db } from "../utils/firebase-config"
-import { useReducer } from "react";
 
 export const ACTIONS = {
-    SET_STATE_INFO: 'set-state-info',
-    SET_PRJTYPE_DATA: 'set-prjtype-data'
+    SET_PRJTYPE: 'set-prjtype',
+    SET_PRJSTATUS: 'set-prjstataus',
+    SET_PRJTYPE_DATA: 'set-prjtype-data',
+    SET_PRJSTATUS_DATA: 'set-prjstatus-data'
 }
 
-export const setStateInfo = (payload) => ({
-    type: ACTIONS.SET_STATE_INFO,
+export const setPrjType = (payload) => ({
+    type: ACTIONS.SET_PRJTYPE,
     payload
 })
 
-export const getPrjType = async (dispatch) => {
-    const prjtypeCollectionRef = collection(db, "PrjType");
-    const data = await getDocs(prjtypeCollectionRef);
-    const prjTypeData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
-
-    dispatch(setPrjTypeData(prjTypeData))
-}
+export const setPrjStatus = (payload) => ({
+    type: ACTIONS.SET_PRJSTATUS,
+    payload
+})
 
 export const setPrjTypeData = (payload) => ({
     type: ACTIONS.SET_PRJTYPE_DATA,
+    payload
+})
+
+export const setPrjStatusData = (payload) => ({
+    type: ACTIONS.SET_PRJSTATUS_DATA,
     payload
 })
