@@ -1,5 +1,5 @@
 import React from 'react'
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../static/css/Menu.scss'
 
 import {BsHouseDoorFill, BsChevronDown} from 'react-icons/bs'

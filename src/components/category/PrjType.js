@@ -1,13 +1,12 @@
 import { deleteDoc, doc } from 'firebase/firestore';
-import React, { useContext, useReducer } from 'react'
-import { useEffect } from 'react';
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/OutletCommonChild.scss'
 import Context from '../../context/context';
-import { setPrjStatus, setPrjType } from '../../reducer/action';
+import { setPrjType } from '../../reducer/action';
 
 
 function PrjType({afterChanges}) {

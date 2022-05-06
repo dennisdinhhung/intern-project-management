@@ -1,8 +1,6 @@
-import React, { useContext, useState } from 'react'
-import firebase from 'firebase/app'
+import React, { useContext } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './Login'
-import Menu from './Menu'
 import PrjType from './category/PrjType'
 import PrjStatus from './category/PrjStatus'
 import PrjTechStack from './category/PrjTechStack'
@@ -24,18 +22,17 @@ import { useEffect } from 'react'
 import { setPrjStatusData, setPrjTypeData } from '../reducer/action'
 import EditPrjStatus from './edit_category/EditPrjStatus'
 import Context from '../context/context'
-import { collection, doc, getDocs } from "firebase/firestore"
+import { collection, getDocs } from "firebase/firestore"
 import { db } from "../utils/firebase-config"
 
 function Container() {
 
   const [state, dispatch] = useContext(Context);
-  const { prjTypeState, prjStatusState } = state
 
   //common
   useEffect(() => {
     getPrjType();
-    getPrjStatus()
+    getPrjStatus();
   }, [])
 
   const getPrjType = async () => {

@@ -1,6 +1,3 @@
-import { collection, doc, getDocs } from "firebase/firestore"
-import { db } from "../utils/firebase-config"
-
 export const ACTIONS = {
     SET_PRJTYPE: 'set-prjtype',
     SET_PRJSTATUS: 'set-prjstataus',
