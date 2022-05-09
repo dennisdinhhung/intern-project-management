@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import Context from '../../context/context';
 import { setPrjStatus } from '../../reducer/action';
 
-function PrjStatus({afterChanges}) {
+import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
+
+function PrjStatus({ afterChanges }) {
 
   const [state, dispatch] = useContext(Context);
-  
+
   const [checkboxList, setCheckboxList] = useState([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [errorEdit, setErrorEdit] = useState();
@@ -91,6 +93,15 @@ function PrjStatus({afterChanges}) {
     afterChanges()
   }
 
+  const statusClass = (info) => {
+    if (info === 'ACTIVE') {
+        return 'active'
+    }
+    else if (info === 'INACTIVE') {
+        return 'inactive'
+    }
+}
+
 
   return (
     <div className='ProjectStatus Common'>
@@ -98,13 +109,16 @@ function PrjStatus({afterChanges}) {
         Project Status
       </div>
 
-      <button
-        className='btn-add'
-        onClick={() => {
-          redirect('add')
-        }}>
-        Add
-      </button>
+      <div className='div-btn-add'>
+        <button
+          className='button btn-add'
+          onClick={() => {
+            redirect('add')
+          }}>
+          <BsPlusLg className='icon' />
+          Add
+        </button>
+      </div>
 
       <table className='table'>
         <thead>
@@ -126,21 +140,21 @@ function PrjStatus({afterChanges}) {
           {
             prjStatusData.map((row, index) => (
               <tr key={index}>
-                <td>
+                <td className='checkbox'>
                   <input
                     type="checkbox"
                     value={row.id}
                     checked={checkboxList.includes(row.id)}
                     onChange={() => handleCheckbox(row.id)}
                   />
-                  {
-                    //! testing purposes
-                  }
-                  {row.id}
                 </td>
                 <td>{row.name}</td>
                 <td>{row.description}</td>
-                <td>{row.status}</td>
+                <td>
+                  <div className={`status ${statusClass(row.status)}`}>
+                    {row.status}
+                  </div>
+                </td>
               </tr>
             ))
           }
@@ -152,17 +166,23 @@ function PrjStatus({afterChanges}) {
       </div>
 
       <div className="div-btns">
-        <button
-          className='blue-btn'
-          onClick={handleEdit}>
-          Edit
-        </button>
+        <div>
+          <button
+            className='button blue-btn'
+            onClick={handleEdit}>
+            <BsFillPencilFill className='icon' />
+            Edit
+          </button>
+        </div>
 
-        <button
-          className='blue-btn'
-          onClick={handleDelete}>
-          Delete
-        </button>
+        <div>
+          <button
+            className='button blue-btn'
+            onClick={handleDelete}>
+            <BsFillTrashFill className='icon' />
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   )

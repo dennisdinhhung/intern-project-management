@@ -47,6 +47,32 @@
         border: none;
         background-color: #FFFFFF;
 
+        .btn-profile{
+            display: flex;
+            padding: 10px 0px 10px 10px;
+
+            border-style: none;
+            border-radius: 5px;
+        }
+
+        .profile-active{
+            background-color: var(--main-blue);
+            color: var(--main-white);
+        }
+
+        .profile-inactive{
+            background-color: var(--main-white);
+            color: #000;
+        }
+
+        .profile-inactive:hover{
+            background-color: var(--background-grey);
+        }
+
+        .icon-chevron{
+            margin: 0px 5px;
+        }
+
         .username{
             align-items: center;
         }
@@ -54,10 +80,6 @@
         .icon-chevron{
             align-items: center;
         }
-    }
-
-    .div-user-menu:active{
-        background-color: var(--background-grey);
     }
 
     .profile-drop-down{

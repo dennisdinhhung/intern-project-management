@@ -1,16 +1,17 @@
 import { deleteDoc, doc } from 'firebase/firestore';
 import React, { useContext } from 'react'
 import { useState } from 'react';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/OutletCommonChild.scss'
 import Context from '../../context/context';
 import { setPrjType } from '../../reducer/action';
+import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
 
 
-function PrjType({afterChanges}) {
-    
+function PrjType({ afterChanges }) {
+
     const [state, dispatch] = useContext(Context);
 
     const [checkboxList, setCheckboxList] = useState([]);
@@ -25,13 +26,13 @@ function PrjType({afterChanges}) {
         // gather all id of the table
         // add id into a list
         // have the checkbox check if the its id is in the list
-            //if yes, checked
-            //if not, unchecked
-        
-        if (!isCheckAll){
+        //if yes, checked
+        //if not, unchecked
+
+        if (!isCheckAll) {
 
             const newList = [];
-            
+
             prjTypeData.map((item) => (
                 newList.push(item.id)
             ))
@@ -39,7 +40,7 @@ function PrjType({afterChanges}) {
             setIsCheckAll(true)
             setCheckboxList(newList)
         }
-        else{
+        else {
             setIsCheckAll(false)
 
             const newList = []
@@ -48,7 +49,7 @@ function PrjType({afterChanges}) {
     }
 
 
-    
+
     const handleCheckbox = (id) => {
         //check if the id is in the list
         const isChecked = checkboxList.includes(id);
@@ -69,14 +70,14 @@ function PrjType({afterChanges}) {
     const handleEdit = () => {
 
         //gather the selected id
-        
-        if (checkboxList.length === 1){
+
+        if (checkboxList.length === 1) {
             const selectedID = checkboxList[0];
             const row = prjTypeData.filter(item => item.id === selectedID)
             dispatch(setPrjType(row[0]))
             redirect('edit')
         }
-        else{
+        else {
             setErrorEdit('You can only edit one thing at a time')
             return
         }
@@ -95,29 +96,41 @@ function PrjType({afterChanges}) {
         afterChanges()
     }
 
+    const statusClass = (info) => {
+        if (info === 'ACTIVE') {
+            return 'active'
+        }
+        else if (info === 'INACTIVE') {
+            return 'inactive'
+        }
+    }
+
     return (
         <div className='ProjectType Common'>
             <div className="title">
                 Project Type
             </div>
 
-            <button
-                className='btn-add'
-                onClick={() => {
-                    redirect('add')
-                }}>
-                Add
-            </button>
+            <div className='div-btn-add'>
+                <button
+                    className='button btn-add'
+                    onClick={() => {
+                        redirect('add')
+                    }}>
+                    <BsPlusLg className='icon' />
+                    Add
+                </button>
+            </div>
 
             <table className='table'>
                 <thead>
                     <tr>
                         <th>
-                            <input 
+                            <input
                                 type="checkbox"
                                 value={isCheckAll}
-                                onClick={handleCheckAll}/>
-                                
+                                onClick={handleCheckAll} />
+
                         </th>
                         <th>Name</th>
                         <th>Description</th>
@@ -130,42 +143,50 @@ function PrjType({afterChanges}) {
                     {
                         prjTypeData.map((row, index) => (
                             <tr key={index}>
-                                <td>
-                                    <input 
+                                <td className='checkbox'>
+                                    <input
                                         type="checkbox"
                                         value={row.id}
                                         checked={checkboxList.includes(row.id)}
                                         onChange={() => handleCheckbox(row.id)}
-                                        />
-                                    {
-                                        //! testing purposes
-                                    }
-                                    {row.id}
+                                    />
                                 </td>
                                 <td>{row.name}</td>
                                 <td>{row.description}</td>
-                                <td>{row.priority}</td>
-                                <td>{row.status}</td>
+                                <td className='priority'>{row.priority}</td>
+                                <td>
+                                    <div className={`status ${statusClass(row.status)}`}>
+                                        {row.status}
+                                    </div>
+                                </td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
-            
+
             <div className="error">
                 {errorEdit}
             </div>
 
             <div className="div-btns">
-                <button
-                    onClick={handleEdit}>
-                    Edit
-                </button>
+                <div>
+                    <button
+                        className='button blue-btn'
+                        onClick={handleEdit}>
+                        <BsFillPencilFill className='icon' />
+                        Edit
+                    </button>
+                </div>
 
-                <button
-                    onClick={handleDelete}>
-                    Delete
-                </button>
+                <div>
+                    <button
+                        className='button blue-btn'
+                        onClick={handleDelete}>
+                        <BsFillTrashFill className='icon' />
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     )

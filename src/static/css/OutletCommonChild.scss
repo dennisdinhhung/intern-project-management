@@ -1,4 +1,4 @@
-.Common{
+.Common {
     padding: 26px;
 
     display: flex;
@@ -6,11 +6,11 @@
 
     width: 100%;
 
-    & > *{
+    &>* {
         margin-bottom: 10px;
     }
 
-    .title{
+    .title {
         color: var(--title-darkblue);
 
         font-weight: 600;
@@ -18,31 +18,116 @@
         line-height: 44px;
     }
 
-    .btn-add{
-        width: 80px;
-        height: 30px;
+    .div-btn-add{
+        margin-left: auto;
+    }
 
+
+    .blue-btn {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        color: var(--main-white);
+
+        border-style: none;
+        border-radius: 5px;
+
+        background-color: var(--main-blue);
+
+        margin-right: 10px;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+
+
+        padding: 10px 20px;
+
+
+        .icon {
+            margin-right: 5px;
+            align-items: center;
+        }
+    }
+
+    button:hover{
+        opacity: 85%;
+    }
+
+    button:active{
+        opacity: 100%;
+    }
+
+    .btn-add {
         align-self: flex-end;
 
         font-weight: 600;
         font-size: 16px;
         line-height: 20px;
         color: var(--main-white);
-        
+
         border-style: none;
         border-radius: 5px;
-        
+
         background-color: var(--main-blue);
     }
 
-    .table{
+    .table {
         width: 100%;
         border-collapse: collapse;
-        border-radius: 5px;
+        border-radius: 1em;
+        color: var(--title-darkblue);
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 
-        th, td{
-            border: 1px solid ;
-            
+        thead {
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
         }
+
+        th {
+            padding: 1rem 2rem;
+            letter-spacing: 0.1rem;
+        }
+
+        td {
+            padding: 1rem 2rem;
+        }
+
+        input {
+            width: 15px;
+            height: 15px;
+        }
+
+        .checkbox {
+            text-align: center;
+        }
+
+        .priority {
+            text-align: center;
+        }
+
+        .status {
+            border-radius: 5px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .active {
+            background-color: #c8e6c9;
+            color: #388e3c;
+        }
+
+        .inactive {
+            background-color: #ffcdd2;
+            color: #c62828;
+        }
+    }
+
+    tr:nth-child(even) {
+        background-color: #f4f6fb;
+    }
+
+    .div-btns{
+        display: flex;
     }
 }
