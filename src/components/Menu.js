@@ -1,15 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import '../static/css/Menu.scss'
 
-import {BsHouseDoorFill, BsChevronDown} from 'react-icons/bs'
+import {BsHouseDoorFill, BsChevronDown, BsStack, BsFillGrid1X2Fill, BsCheckSquareFill, BsPeopleFill, BsFillPersonLinesFill, BsListNested, BsCodeSlash, BsFileEarmarkCodeFill} from 'react-icons/bs'
+import { useState } from 'react';
 
 function Menu() {
   const redirect = useNavigate();
 
+  const [activeBtn, setActivebtn] = useState();
+
   // const handleProjectStatus = () => {
   //   redirect('/home/project-status')
   // }
+
+  useEffect(() => {
+    setActivebtn(window.location.pathname)
+  }, [])
+
+  const redirectFunc = (link) => {
+    setActivebtn(link)
+    redirect(link)
+  }
 
   return (
     <div className='Menu'>
@@ -17,98 +29,104 @@ function Menu() {
 
         <div className="home">
           <button
-            className='btn-home'
-            onClick={() => { redirect('/home') }}>
+            className={activeBtn === '/home' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home')}}>
               <BsHouseDoorFill className='menu-icon'/>
               Home
           </button>
         </div>
 
 
-        <div className="title-category">
+        <div className="title-menu">
           Catergory
         </div>
 
-        <div className="btn-prj-type">
+        <div className="div-button">
           <button
-            className=''
-            onClick={() => { redirect('project-type') }}
+            className={activeBtn === '/home/project-type' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/project-type')}}
           >
-            <div>
-              Project Type
-            </div>
+            <BsFillGrid1X2Fill className="menu-icon"/>
+            Project Type
           </button>
         </div>
 
-        <div className="btn-prj-status">
+        <div className="div-button">
           <button
-            className=''
-            onClick={() => { redirect('project-status') }}
+            className={activeBtn === '/home/project-status' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/project-status')}}
           >
-            <div>
+            <BsCheckSquareFill className="menu-icon"/>
               Project Status
-            </div>
+
           </button>
         </div>
 
-        <div className="btn-prj-techstack">
+        <div className="div-button">
           <button
-            className=''
-          onClick={() => {redirect('project-techstack')}}
+            className={activeBtn === '/home/techstack' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/techstack')}}
           >
-            <div>
-              Tech Stack
-            </div>
+            <BsStack className='menu-icon'/>
+            Tech Stack
           </button>
         </div>
 
-        <div className="btn-customer-group">
+        <div className="div-button">
           <button
-            className=''
-            onClick={() => { redirect('customer-group') }}
+            className={activeBtn === '/home/customer-group' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/customer-group')}}
           >
-            <div>
+            <BsPeopleFill className='menu-icon'/>
               Customer Group
-            </div>
+
           </button>
         </div>
       </div>
 
       <div className="div-management">
-        <div className="title-management">
+        <div className="title-menu">
           Management
         </div>
 
-        <div className="btn-mng-dep">
+        <div className="div-button">
           <button
-            className=''
-            onClick={() => { redirect('manage-department') }}
+            className={activeBtn === '/home/manage-department' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/manage-department')}}
           >
-            <div>
-              Manage Department
-            </div>
+            <BsListNested className="menu-icon"/>
+              Department
+
           </button>
         </div>
 
-        <div className="btn-mng-employee">
+        <div className="div-button">
           <button
-            className=''
-            onClick={() => { redirect('manage-employee') }}
+            className={activeBtn === '/home/manage-employee' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/manage-employee')}}
           >
-            <div>
-              Manage Employee
-            </div>
+            <BsFillPersonLinesFill className="menu-icon"/>
+              Employee
+
           </button>
         </div>
 
-        <div className="btn-mng-project">
+        <div className="div-button">
           <button
-            className=''
-            onClick={() => { redirect('manage-project') }}
+            className={activeBtn === '/home/manage-project' ? 'active-nav' : 'inactive-nav'}
+            onClick={() => { 
+              redirectFunc('/home/manage-project')}}
           >
-            <div>
-              Manage Project
-            </div>
+            <BsFileEarmarkCodeFill className="menu-icon"/>
+              Project
+
           </button>
         </div>
       </div>

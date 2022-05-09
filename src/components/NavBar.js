@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import '../static/css/NavBar.scss'
 import { useAuth } from '../utils/AuthProvider';
 
-import {BsFillCaretDownFill, BsChevronDown} from 'react-icons/bs'
+import { BsFillCaretDownFill, BsChevronDown, BsFillPersonFill, BsDoorOpenFill } from 'react-icons/bs'
 
 function NavBar() {
 
@@ -12,60 +12,66 @@ function NavBar() {
 
   const redirect = useNavigate();
 
-  const { authUser} = useAuth();
+  const { authUser } = useAuth();
 
   return (
     <div className='NavBar'>
-        <div className="title-navbar">
-            NotJira
-        </div>
+      <div className="title-navbar">
+        NotJira
+      </div>
 
-        <input 
-          type="text" 
-          className='input-search'
-          placeholder='Search'/>
+      <input
+        type="text"
+        className='input-search'
+        placeholder='Search' />
 
+      <div
+        className="div-user-menu"
+        >
         <button
-          className="div-user-menu"
+          className={`btn-profile ${dropDown ? 'profile-active' : 'profile-inactive'}`}
           onClick={() => setDropDown(!dropDown)}>
-            <img src="" alt="" />
-            <div className="username">
-              {authUser?.email}
-            </div>
+          <img src="" alt="" />
+          <div className="username">
+            {authUser?.email}
+          </div>
 
-            <BsChevronDown className='icon-chevron'/>
-
-            {dropDown && <ProfileDropDown/>}
+          <BsChevronDown className='icon-chevron' />
         </button>
 
-        
+        {dropDown && <ProfileDropDown />}
+      </div>
+
+
     </div>
   )
 }
 
 function ProfileDropDown() {
   const redirect = useNavigate();
-  const {authUser, logout } = useAuth();
+  const { logout } = useAuth();
 
   const handleLogOut = async () => {
-    try{
+    try {
       await logout();
       redirect('/')
-    }catch{
+    } catch {
       console.log('Failed to log out')
     }
   }
 
-  return(
+  return (
     <div className='profile-drop-down'>
       <button>
+        <BsFillPersonFill/>
         My Profile
       </button>
 
       <button
-          onClick={handleLogOut}>
-            Log Out
-        </button>
+        onClick={handleLogOut}>
+          <BsDoorOpenFill/>
+        Log Out
+      </button>
     </div>
   )
 }
