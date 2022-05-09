@@ -12,8 +12,21 @@ export const initialState = {
         description: '',
         status: ''
     },
+    techStackState: {
+        name: '',
+        description: '',
+        status: ''
+    },
+    customerGroupState: {
+        name: '',
+        description: '',
+        priority: '',
+        status: ''
+    },
     prjTypeData: [],
     prjStatusData: [],
+    techStackData: [],
+    customerGroupData: []
 }
 
 const reducer = (state, action) => {
@@ -28,6 +41,16 @@ const reducer = (state, action) => {
                 ...state,
                 prjStatusState: action.payload
             }
+        case ACTIONS.SET_TECHSTACK:
+            return {
+                ...state,
+                techStackState: action.payload
+            }
+        case ACTIONS.SET_CUSTOMER_GROUP:
+            return {
+                ...state,
+                customerGroupState: action.payload
+            }
         case ACTIONS.SET_PRJTYPE_DATA:
             return {
                 ...state,
@@ -37,6 +60,16 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 prjStatusData: action.payload
+            }
+        case ACTIONS.SET_TECHSTACK_DATA:
+            return {
+                ...state,
+                techStackData: action.payload
+            }
+        case ACTIONS.SET_CUSTOMER_GROUP_DATA:
+            return {
+                ...state,
+                customerGroupData: action.payload
             }
         default:
             return state
