@@ -1,11 +1,10 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom';
-import { auth } from '../utils/firebase-config';
+import { useAuth } from '../utils/AuthProvider';
 
 import '../static/css/Login.scss'
-import { useAuth } from '../utils/AuthProvider';
+import {BsFillEyeFill, BsFillEyeSlashFill} from 'react-icons/bs'
 
 function Login() {
 
