@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './Login'
 import PrjType from './category/PrjType'
@@ -16,40 +16,61 @@ import AddPrjStatus from './add_category/AddPrjStatus'
 import AddTechStack from './add_category/AddTechStack'
 import AddCustomerGroup from './add_category/AddCustomerGroup'
 import EditPrjType from './edit_category/EditPrjType'
+import EditTechStack from './edit_category/EditTechStack'
 import { AuthProvider } from '../utils/AuthProvider'
 import { RequireAuth } from '../utils/RequireAuth'
 import { useEffect } from 'react'
-import { setPrjStatusData, setPrjTypeData } from '../reducer/action'
+import { setCustomerGroupData, setPrjStatusData, setPrjTypeData, setTechStackData } from '../reducer/action'
 import EditPrjStatus from './edit_category/EditPrjStatus'
 import Context from '../context/context'
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../utils/firebase-config"
+import EditCustomerGroup from './edit_category/EditCustomerGroup'
 
 function Container() {
 
   const [state, dispatch] = useContext(Context);
 
-  //common
-  useEffect(() => {
-    getPrjType();
-    getPrjStatus();
-  }, [])
-
-  const getPrjType = async () => {
+  const getPrjType = useCallback(async () => {
     const prjtypeCollectionRef = collection(db, "PrjType");
     const data = await getDocs(prjtypeCollectionRef);
     const prjTypeData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
     dispatch(setPrjTypeData(prjTypeData))
-  }
+  }, [dispatch])
 
-  const getPrjStatus = async () => {
+  const getPrjStatus = useCallback(async () => {
     const prjstatusCollectionRef = collection(db, "PrjStatus");
     const data = await getDocs(prjstatusCollectionRef);
     const prjStatusData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     
     dispatch(setPrjStatusData(prjStatusData))
-  }
+  }, [dispatch])
+
+  const getTechStack = useCallback(async () => {
+    const teckStackCollectionRef = collection(db, "TechStack");
+    const data = await getDocs(teckStackCollectionRef);
+    const teckStackData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    
+    dispatch(setTechStackData(teckStackData))
+  }, [dispatch])
+
+  const getCustomerGroup = useCallback(async () => {
+    const customerGroupCollectionRef = collection(db, "CustomerGroup");
+    const data = await getDocs(customerGroupCollectionRef);
+    const customerGroupData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    
+    dispatch(setCustomerGroupData(customerGroupData))
+  }, [dispatch])
+
+  //common
+  useEffect(() => {
+    getPrjType();
+    getPrjStatus();
+    getTechStack();
+    getCustomerGroup();
+  }, [getPrjType, getPrjStatus, getTechStack, getCustomerGroup])
+
 
   //common
   const afterChangesPrjType = () => {
@@ -58,6 +79,14 @@ function Container() {
 
   const afterChangesPrjStatus = () => {
     getPrjStatus()
+  }
+
+  const afterChangesTechStack = () => {
+    getTechStack()
+  }
+
+  const afterChangesCustomer = () => {
+    getCustomerGroup()
   }
 
   return (
@@ -103,12 +132,31 @@ function Container() {
                 afterChanges={afterChangesPrjStatus} />
             } />
 
-            <Route path='project-techstack' element={<PrjTechStack />} />
-            <Route path='customer-group' element={<CustomerGroup />} />
+            {//* TECH-STACK
+            }
+            <Route path='techstack' element={
+              <PrjTechStack 
+              afterChanges={afterChangesTechStack}/>} />
+            <Route path='techstack/add' element={
+              <AddTechStack 
+                afterChanges={afterChangesTechStack}/>} />
+            <Route path='techstack/edit' element={
+              <EditTechStack
+                afterChanges={afterChangesTechStack}/>
+            }/>
 
-            <Route path='project-techstack/add' element={<AddTechStack />} />
-            <Route path='customer-group/add' element={<AddCustomerGroup />} />
-
+            {//* CUSTOMER-GROUP
+            }
+            <Route path='customer-group' element={
+              <CustomerGroup 
+                afterChanges={afterChangesCustomer}/>} />
+            <Route path='customer-group/add' element={
+              <AddCustomerGroup 
+                afterChanges={afterChangesCustomer}/>} />
+            <Route path='customer-group/edit' element={
+              <EditCustomerGroup
+                afterChanges={afterChangesCustomer}/>
+            }/>
 
 
 
