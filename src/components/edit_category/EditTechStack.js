@@ -2,13 +2,12 @@ import { updateDoc, doc } from 'firebase/firestore';
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
+import { setTechStack } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
-import { setPrjStatus } from '../../reducer/action';
 
-function EditPrjStatus({ afterChanges }) {
-
+function EditTechStack({afterChanges}) {
     const [state, dispatch] = useContext(Context)
-    const { prjStatusState } = state
+    const { techStackState } = state
 
     const redirect = useNavigate();
 
@@ -16,22 +15,22 @@ function EditPrjStatus({ afterChanges }) {
         e.preventDefault();
 
         //get the specific prjType doc
-        const editDoc = doc(db, 'PrjStatus', prjStatusState.id)
-        const updated = prjStatusState
+        const editDoc = doc(db, 'TechStack', techStackState.id)
+        const updated = techStackState
         delete updated.id
         //update info onto firebase
         await updateDoc(editDoc, updated)
         afterChanges()
 
         dispatch(
-            setPrjStatus({
+            setTechStack({
                 name: '',
                 description: '',
                 status: ''
             })
         )
 
-        redirect('/home/project-status')
+        redirect('/home/techstack')
     }
 
 
@@ -46,11 +45,11 @@ function EditPrjStatus({ afterChanges }) {
                 <input
                     type="text"
                     className='input-name'
-                    value={prjStatusState.name}
+                    value={techStackState.name}
                     onChange={(e) => {
                         dispatch(
-                            setPrjStatus({ 
-                                ...prjStatusState, 
+                            setTechStack({ 
+                                ...techStackState, 
                                 name: e.target.value }))
                     }} />
 
@@ -58,18 +57,18 @@ function EditPrjStatus({ afterChanges }) {
                 <input
                     type="text"
                     className='input-desc'
-                    value={prjStatusState.description}
+                    value={techStackState.description}
                     onChange={(e) => {
-                        dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
+                        dispatch(setTechStack({ ...techStackState, description: e.target.value }))
                     }} />
 
                 <div>Status</div>
                 <select
                     name=""
                     id=""
-                    value={prjStatusState.status}
+                    value={techStackState.status}
                     onChange={(e) => {
-                        dispatch(setPrjStatus({ ...prjStatusState, status: e.target.value }))
+                        dispatch(setTechStack({ ...techStackState, status: e.target.value }))
                     }}>
                     <option value="" disabled>Choose the status</option>
                     <option value="ACTIVE">ACTIVE</option>
@@ -86,4 +85,4 @@ function EditPrjStatus({ afterChanges }) {
     )
 }
 
-export default EditPrjStatus
+export default EditTechStack

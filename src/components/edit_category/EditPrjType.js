@@ -2,8 +2,8 @@ import { updateDoc, doc } from 'firebase/firestore';
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
-import { setPrjType } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
+import { setPrjType } from '../../reducer/action';
 
 function EditPrjType({ afterChanges }) {
 

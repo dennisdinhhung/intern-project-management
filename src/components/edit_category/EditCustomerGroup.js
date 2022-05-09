@@ -2,13 +2,12 @@ import { updateDoc, doc } from 'firebase/firestore';
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
+import { setCustomerGroup } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
-import { setPrjStatus } from '../../reducer/action';
 
-function EditPrjStatus({ afterChanges }) {
-
+function EditCustomerGroup({afterChanges}) {
     const [state, dispatch] = useContext(Context)
-    const { prjStatusState } = state
+    const { customerGroupState } = state
 
     const redirect = useNavigate();
 
@@ -16,29 +15,32 @@ function EditPrjStatus({ afterChanges }) {
         e.preventDefault();
 
         //get the specific prjType doc
-        const editDoc = doc(db, 'PrjStatus', prjStatusState.id)
-        const updated = prjStatusState
-        delete updated.id
+        const editDoc = doc(db, 'CustomerGroup', customerGroupState.id)
+        const updatedType = customerGroupState
+        delete updatedType.id
+        
         //update info onto firebase
-        await updateDoc(editDoc, updated)
+        await updateDoc(editDoc, updatedType)
+        
         afterChanges()
 
         dispatch(
-            setPrjStatus({
+            setCustomerGroup({
                 name: '',
                 description: '',
+                priority: '',
                 status: ''
             })
         )
 
-        redirect('/home/project-status')
+        redirect('/home/customer-group')
     }
 
 
     return (
         <div className='AddProjectType Common'>
             <div className="title">
-                Edit Project Type
+                Edit Customer Group
             </div>
 
             <form action="">
@@ -46,11 +48,11 @@ function EditPrjStatus({ afterChanges }) {
                 <input
                     type="text"
                     className='input-name'
-                    value={prjStatusState.name}
+                    value={customerGroupState.name}
                     onChange={(e) => {
                         dispatch(
-                            setPrjStatus({ 
-                                ...prjStatusState, 
+                            setCustomerGroup({ 
+                                ...customerGroupState, 
                                 name: e.target.value }))
                     }} />
 
@@ -58,18 +60,27 @@ function EditPrjStatus({ afterChanges }) {
                 <input
                     type="text"
                     className='input-desc'
-                    value={prjStatusState.description}
+                    value={customerGroupState.description}
                     onChange={(e) => {
-                        dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
+                        dispatch(setCustomerGroup({ ...customerGroupState, description: e.target.value }))
+                    }} />
+
+                <div>Priority Number</div>
+                <input
+                    type='number'
+                    className='input-priority'
+                    value={customerGroupState.priority}
+                    onChange={(e) => {
+                        dispatch(setCustomerGroup({ ...customerGroupState, priority: e.target.value }))
                     }} />
 
                 <div>Status</div>
                 <select
                     name=""
                     id=""
-                    value={prjStatusState.status}
+                    value={customerGroupState.status}
                     onChange={(e) => {
-                        dispatch(setPrjStatus({ ...prjStatusState, status: e.target.value }))
+                        dispatch(setCustomerGroup({ ...customerGroupState, status: e.target.value }))
                     }}>
                     <option value="" disabled>Choose the status</option>
                     <option value="ACTIVE">ACTIVE</option>
@@ -86,4 +97,4 @@ function EditPrjStatus({ afterChanges }) {
     )
 }
 
-export default EditPrjStatus
+export default EditCustomerGroup
