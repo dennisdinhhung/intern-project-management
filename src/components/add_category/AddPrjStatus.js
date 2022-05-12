@@ -1,14 +1,26 @@
-import { addDoc, collection } from 'firebase/firestore';
-import React, { useContext } from 'react'
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
-import { setPrjStatus } from '../../reducer/action';
+import { setPrjStatus, setPrjStatusData } from '../../reducer/action';
 
-function AddPrjStatus({ afterChanges }) {
+function AddPrjStatus() {
 
     const [state, dispatch] = useContext(Context)
     const { prjStatusState } = state
+
+    const getPrjStatus = useCallback(async () => {
+        const prjstatusCollectionRef = collection(db, "PrjStatus");
+        const data = await getDocs(prjstatusCollectionRef);
+        const prjStatusData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setPrjStatusData(prjStatusData))
+    }, [dispatch])
+
+    const afterChanges = () => {
+        getPrjStatus()
+    }
 
     const redirect = useNavigate();
 

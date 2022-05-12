@@ -1,15 +1,27 @@
-import { addDoc, collection } from 'firebase/firestore';
-import React, { useContext } from 'react'
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
-import { setPrjType } from '../../reducer/action';
+import { setPrjType, setPrjTypeData } from '../../reducer/action';
 
-function AddPrjType({afterChanges}) {
+function AddPrjType() {
 
     const [state, dispatch] = useContext(Context)
 
     const { prjTypeState } = state
+
+    const getPrjType = useCallback(async () => {
+        const prjtypeCollectionRef = collection(db, "PrjType");
+        const data = await getDocs(prjtypeCollectionRef);
+        const prjTypeData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setPrjTypeData(prjTypeData))
+    }, [dispatch])
+
+    const afterChanges = () => {
+        getPrjType();
+    }
 
     const redirect = useNavigate();
 

@@ -1,16 +1,16 @@
-import { deleteDoc, doc } from 'firebase/firestore';
-import React, { useContext } from 'react'
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/OutletCommonChild.scss'
 import Context from '../../context/context';
-import { setCustomerGroup } from '../../reducer/action';
+import { setCustomerGroup, setCustomerGroupData } from '../../reducer/action';
 
 import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
 
-function CustomerGroup({ afterChanges }) {
+function CustomerGroup() {
 
     const [state, dispatch] = useContext(Context);
 
@@ -20,19 +20,35 @@ function CustomerGroup({ afterChanges }) {
 
     const { customerGroupData } = state
 
+    const getCustomerGroup = useCallback(async () => {
+        const customerGroupCollectionRef = collection(db, "CustomerGroup");
+        const data = await getDocs(customerGroupCollectionRef);
+        const customerGroupData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setCustomerGroupData(customerGroupData))
+    }, [dispatch])
+
+    useEffect(() => {
+        getCustomerGroup()
+    }, [getCustomerGroup])
+
+    const afterChanges = () => {
+        getCustomerGroup()
+    }
+    
     const redirect = useNavigate();
 
     const handleCheckAll = () => {
         // gather all id of the table
         // add id into a list
         // have the checkbox check if the its id is in the list
-            //if yes, checked
-            //if not, unchecked
-        
-        if (!isCheckAll){
+        //if yes, checked
+        //if not, unchecked
+
+        if (!isCheckAll) {
 
             const newList = [];
-            
+
             customerGroupData.map((item) => (
                 newList.push(item.id)
             ))
@@ -40,7 +56,7 @@ function CustomerGroup({ afterChanges }) {
             setIsCheckAll(true)
             setCheckboxList(newList)
         }
-        else{
+        else {
             setIsCheckAll(false)
 
             const newList = []
@@ -49,7 +65,7 @@ function CustomerGroup({ afterChanges }) {
     }
 
 
-    
+
     const handleCheckbox = (id) => {
         //check if the id is in the list
         const isChecked = checkboxList.includes(id);
@@ -70,15 +86,15 @@ function CustomerGroup({ afterChanges }) {
     const handleEdit = () => {
 
         //gather the selected id
-        
-        if (checkboxList.length === 1){
+
+        if (checkboxList.length === 1) {
             const selectedID = checkboxList[0];
             const row = customerGroupData.filter(item => item.id === selectedID)
             console.log(row[0])
             dispatch(setCustomerGroup(row[0]))
             redirect('edit')
         }
-        else{
+        else {
             setErrorEdit('You can only edit one thing at a time')
             return
         }
@@ -127,11 +143,11 @@ function CustomerGroup({ afterChanges }) {
                 <thead>
                     <tr>
                         <th>
-                            <input 
+                            <input
                                 type="checkbox"
                                 value={isCheckAll}
-                                onClick={handleCheckAll}/>
-                                
+                                onClick={handleCheckAll} />
+
                         </th>
                         <th>Name</th>
                         <th>Description</th>
@@ -145,12 +161,12 @@ function CustomerGroup({ afterChanges }) {
                         customerGroupData.map((row, index) => (
                             <tr key={index}>
                                 <td className='checkbox'>
-                                    <input 
+                                    <input
                                         type="checkbox"
                                         value={row.id}
                                         checked={checkboxList.includes(row.id)}
                                         onChange={() => handleCheckbox(row.id)}
-                                        />
+                                    />
                                 </td>
                                 <td>{row.name}</td>
                                 <td>{row.description}</td>
@@ -165,7 +181,7 @@ function CustomerGroup({ afterChanges }) {
                     }
                 </tbody>
             </table>
-            
+
             <div className="error">
                 {errorEdit}
             </div>

@@ -1,16 +1,16 @@
-import { deleteDoc, doc } from 'firebase/firestore';
-import React, { useContext } from 'react'
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/OutletCommonChild.scss'
 import Context from '../../context/context';
-import { setPrjType } from '../../reducer/action';
+import { setPrjType, setPrjTypeData } from '../../reducer/action';
 import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
 
 
-function PrjType({ afterChanges }) {
+function PrjType() {
 
     const [state, dispatch] = useContext(Context);
 
@@ -19,6 +19,22 @@ function PrjType({ afterChanges }) {
     const [errorEdit, setErrorEdit] = useState();
 
     const { prjTypeData } = state
+
+    const getPrjType = useCallback(async () => {
+        const prjtypeCollectionRef = collection(db, "PrjType");
+        const data = await getDocs(prjtypeCollectionRef);
+        const prjTypeData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setPrjTypeData(prjTypeData))
+    }, [dispatch])
+
+    useEffect(() => {
+        getPrjType();
+    }, [getPrjType])
+
+    const afterChanges = () => {
+        getPrjType();
+    }
 
     const redirect = useNavigate();
 

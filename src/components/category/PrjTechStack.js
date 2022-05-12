@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import '../../static/css/OutletCommonChild.scss'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { useContext } from 'react';
 import Context from '../../context/context';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { setTechStack } from '../../reducer/action';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { setTechStack, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
 import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
 
-function PrjTechStack({ afterChanges }) {
+function PrjTechStack() {
 
     const [state, dispatch] = useContext(Context);
 
@@ -19,6 +19,22 @@ function PrjTechStack({ afterChanges }) {
     const [errorEdit, setErrorEdit] = useState();
 
     const { techStackData } = state
+
+    const getTechStack = useCallback(async () => {
+        const teckStackCollectionRef = collection(db, "TechStack");
+        const data = await getDocs(teckStackCollectionRef);
+        const teckStackData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setTechStackData(teckStackData))
+    }, [dispatch])
+
+    useEffect(() => {
+        getTechStack()
+    }, [getTechStack])
+
+    const afterChanges = () => {
+        getTechStack()
+    }
 
     const redirect = useNavigate();
 

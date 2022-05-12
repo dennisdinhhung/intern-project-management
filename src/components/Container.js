@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './Login'
 import PrjType from './category/PrjType'
@@ -19,75 +19,19 @@ import EditPrjType from './edit_category/EditPrjType'
 import EditTechStack from './edit_category/EditTechStack'
 import { AuthProvider } from '../utils/AuthProvider'
 import { RequireAuth } from '../utils/RequireAuth'
-import { useEffect } from 'react'
-import { setCustomerGroupData, setPrjStatusData, setPrjTypeData, setTechStackData } from '../reducer/action'
 import EditPrjStatus from './edit_category/EditPrjStatus'
 import Context from '../context/context'
-import { collection, getDocs } from "firebase/firestore"
-import { db } from "../utils/firebase-config"
 import EditCustomerGroup from './edit_category/EditCustomerGroup'
+import AddDepartment from './add_manage/AddDepartment'
+import AddEmployee from './add_manage/AddEmployee'
+import EditEmployee from './edit_manage/EditEmployee'
+import EditDepartment from './edit_manage/EditDepartment'
+import AddProject from './add_manage/AddProject'
+import EditProject from './edit_manage/EditProject'
 
 function Container() {
 
   const [state, dispatch] = useContext(Context);
-
-  const getPrjType = useCallback(async () => {
-    const prjtypeCollectionRef = collection(db, "PrjType");
-    const data = await getDocs(prjtypeCollectionRef);
-    const prjTypeData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-
-    dispatch(setPrjTypeData(prjTypeData))
-  }, [dispatch])
-
-  const getPrjStatus = useCallback(async () => {
-    const prjstatusCollectionRef = collection(db, "PrjStatus");
-    const data = await getDocs(prjstatusCollectionRef);
-    const prjStatusData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    
-    dispatch(setPrjStatusData(prjStatusData))
-  }, [dispatch])
-
-  const getTechStack = useCallback(async () => {
-    const teckStackCollectionRef = collection(db, "TechStack");
-    const data = await getDocs(teckStackCollectionRef);
-    const teckStackData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    
-    dispatch(setTechStackData(teckStackData))
-  }, [dispatch])
-
-  const getCustomerGroup = useCallback(async () => {
-    const customerGroupCollectionRef = collection(db, "CustomerGroup");
-    const data = await getDocs(customerGroupCollectionRef);
-    const customerGroupData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    
-    dispatch(setCustomerGroupData(customerGroupData))
-  }, [dispatch])
-
-  //common
-  useEffect(() => {
-    getPrjType();
-    getPrjStatus();
-    getTechStack();
-    getCustomerGroup();
-  }, [getPrjType, getPrjStatus, getTechStack, getCustomerGroup])
-
-
-  //common
-  const afterChangesPrjType = () => {
-    getPrjType();
-  }
-
-  const afterChangesPrjStatus = () => {
-    getPrjStatus()
-  }
-
-  const afterChangesTechStack = () => {
-    getTechStack()
-  }
-
-  const afterChangesCustomer = () => {
-    getCustomerGroup()
-  }
 
   return (
     <AuthProvider>
@@ -104,65 +48,51 @@ function Container() {
 
             {//* PROJECT-TYPE
             }
-            <Route path='project-type' element={
-              <PrjType
-                afterChanges={afterChangesPrjType} />} />
+            <Route path='project-type' element={<PrjType />} />
 
-            <Route path='project-type/add' element={
-              <AddPrjType
-                afterChanges={afterChangesPrjType} />} />
+            <Route path='project-type/add' element={<AddPrjType />} />
 
-            <Route path='project-type/edit' element={
-              <EditPrjType
-                afterChanges={afterChangesPrjType} />} />
+            <Route path='project-type/edit' element={<EditPrjType />} />
 
 
             {//* PROJECT-STATUS
             }
-            <Route path='project-status' element={
-              <PrjStatus
-                afterChanges={afterChangesPrjStatus} />} />
+            <Route path='project-status' element={<PrjStatus />} />
 
-            <Route path='project-status/add' element={
-              <AddPrjStatus
-                afterChanges={afterChangesPrjStatus} />} />
+            <Route path='project-status/add' element={<AddPrjStatus />} />
 
-            <Route path='project-status/edit' element={
-              <EditPrjStatus
-                afterChanges={afterChangesPrjStatus} />
-            } />
+            <Route path='project-status/edit' element={<EditPrjStatus />} />
 
             {//* TECH-STACK
             }
-            <Route path='techstack' element={
-              <PrjTechStack 
-              afterChanges={afterChangesTechStack}/>} />
-            <Route path='techstack/add' element={
-              <AddTechStack 
-                afterChanges={afterChangesTechStack}/>} />
-            <Route path='techstack/edit' element={
-              <EditTechStack
-                afterChanges={afterChangesTechStack}/>
-            }/>
+            <Route path='techstack' element={<PrjTechStack />} />
+            <Route path='techstack/add' element={<AddTechStack />} />
+            <Route path='techstack/edit' element={<EditTechStack />} />
 
             {//* CUSTOMER-GROUP
             }
-            <Route path='customer-group' element={
-              <CustomerGroup 
-                afterChanges={afterChangesCustomer}/>} />
-            <Route path='customer-group/add' element={
-              <AddCustomerGroup 
-                afterChanges={afterChangesCustomer}/>} />
-            <Route path='customer-group/edit' element={
-              <EditCustomerGroup
-                afterChanges={afterChangesCustomer}/>
-            }/>
+            <Route path='customer-group' element={<CustomerGroup />} />
+            <Route path='customer-group/add' element={<AddCustomerGroup />} />
+            <Route path='customer-group/edit' element={<EditCustomerGroup />} />
 
-
+            {//* MANAGEMENT-DEP
+            }
 
             <Route path='manage-department' element={<MngDepartment />} />
+            <Route path='manage-department/add' element={<AddDepartment />} />
+            <Route path='manage-department/edit' element={<EditDepartment />}/>
+
+            {//* MANAGEMENT-EMP
+            }
             <Route path='manage-employee' element={<MngEmployee />} />
+            <Route path='manage-employee/add' element={<AddEmployee />} />
+            <Route path='manage-employee/edit' element={<EditEmployee />}/>
+
+            {//* MANAGEMENT-PRJ
+            }
             <Route path='manage-project' element={<MngProject />} />
+            <Route path='manage-project/add' element={<AddProject/>}/>
+            <Route path='manage-project/edit' element={<EditProject/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

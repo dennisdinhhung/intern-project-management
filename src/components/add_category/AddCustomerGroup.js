@@ -1,14 +1,26 @@
-import { addDoc, collection } from 'firebase/firestore';
-import React, { useContext } from 'react'
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
-import { setCustomerGroup } from '../../reducer/action';
+import { setCustomerGroup, setCustomerGroupData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
-function AddCustomerGroup({afterChanges}) {
+function AddCustomerGroup() {
     const [state, dispatch] = useContext(Context)
 
     const { customerGroupState } = state
+
+    const getCustomerGroup = useCallback(async () => {
+        const customerGroupCollectionRef = collection(db, "CustomerGroup");
+        const data = await getDocs(customerGroupCollectionRef);
+        const customerGroupData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setCustomerGroupData(customerGroupData))
+    }, [dispatch])
+
+    const afterChanges = () => {
+        getCustomerGroup()
+    }
 
     const redirect = useNavigate();
 

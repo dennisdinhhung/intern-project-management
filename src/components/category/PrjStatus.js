@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import '../../static/css/OutletCommonChild.scss'
 import { db } from '../../utils/firebase-config';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom'
 import Context from '../../context/context';
-import { setPrjStatus } from '../../reducer/action';
+import { setPrjStatus, setPrjStatusData } from '../../reducer/action';
 
 import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
 
-function PrjStatus({ afterChanges }) {
+function PrjStatus() {
 
   const [state, dispatch] = useContext(Context);
 
@@ -17,6 +17,22 @@ function PrjStatus({ afterChanges }) {
   const [errorEdit, setErrorEdit] = useState();
 
   const { prjStatusData } = state
+
+  const getPrjStatus = useCallback(async () => {
+    const prjstatusCollectionRef = collection(db, "PrjStatus");
+    const data = await getDocs(prjstatusCollectionRef);
+    const prjStatusData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    dispatch(setPrjStatusData(prjStatusData))
+  }, [dispatch])
+
+  useEffect(() => {
+    getPrjStatus();
+  }, [getPrjStatus])
+
+  const afterChanges = () => {
+    getPrjStatus()
+  }
 
   const redirect = useNavigate();
 
