@@ -1,8 +1,163 @@
-import React from 'react'
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
+import Context from '../../context/context';
+import { db } from '../../utils/firebase-config';
+
+import '../../static/css/CommonAddEdit.scss'
+import { setMngEmployee, setMngEmployeeData, setTechStackData } from '../../reducer/action';
 
 function AddEmployee() {
+  const [state, dispatch] = useContext(Context)
+
+  const { mngEmployeeState, mngEmployeeData, techStackData } = state
+
+  const getMngEmployee = useCallback(async () => {
+    const mngEmployeeCollectionRef = collection(db, "Employee");
+    const data = await getDocs(mngEmployeeCollectionRef);
+    const mngEmployeeData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    dispatch(setMngEmployeeData(mngEmployeeData))
+  }, [dispatch])
+
+  const afterChanges = () => {
+    getMngEmployee()
+  }
+
+  const getTechStack = useCallback(async () => {
+    const teckStackCollectionRef = collection(db, "TechStack");
+    const data = await getDocs(teckStackCollectionRef);
+    const teckStackData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    dispatch(setTechStackData(teckStackData))
+  }, [dispatch])
+
+  //TODO: add loading screen while waiting for getDocs and dispatch to finish
+
+  useEffect(() => {
+    getTechStack()
+  }, [getTechStack])
+
+  const redirect = useNavigate();
+
+  const mngEmployeeCollectionRef = collection(db, "Employee");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    //find the largest id in the array
+    let lastEntry = 0
+    mngEmployeeData.forEach((item) => {
+      if (item.personal_id > lastEntry){
+        lastEntry = item.personal_id
+      }
+    })
+
+    lastEntry++
+    await addDoc(mngEmployeeCollectionRef, {...mngEmployeeState, personal_id: lastEntry})
+
+    dispatch(setMngEmployee({
+      personal_id: '',
+      personal_info: {
+        name: '',
+        dob: '',
+        phone: ''
+      },
+      project_participated: [],
+      techstack_info: []
+    }))
+
+    afterChanges()
+
+    redirect('/home/manage-employee')
+  }
+
+  const handleCheckbox = (value) => {
+    const isChecked = mngEmployeeState.techstack_info.includes(value)
+
+    const checkboxListUpdate = isChecked ? mngEmployeeState.techstack_info.filter(item => item !== value) : [...mngEmployeeState.techstack_info, value]
+
+    dispatch(setMngEmployee({
+      ...mngEmployeeState,
+      techstack_info: checkboxListUpdate
+    }))
+  }
+
   return (
-    <div>AddEmployee</div>
+    <div className='CommonAddEdit'>
+      <div className="title">
+        Add Employee
+      </div>
+      <form action="">
+        <div>Name</div>
+        <input
+          type="text"
+          className='input'
+          value={mngEmployeeState.personal_info.name}
+          onChange={(e) => {
+            dispatch(
+              setMngEmployee({
+                ...mngEmployeeState,
+                personal_info: { 
+                    ...mngEmployeeState.personal_info, 
+                    name: e.target.value }
+              }))
+          }} />
+
+        <div>Date of Birth</div>
+        <input
+          type="date"
+          className='input'
+          value={mngEmployeeState.personal_info.dob}
+          onChange={(e) => {
+            dispatch(
+              setMngEmployee({
+                ...mngEmployeeState,
+                personal_info: { 
+                  ...mngEmployeeState.personal_info,
+                  dob: e.target.value }
+              }))
+          }} />
+        <div>Phone Number</div>
+        <input
+          type='text'
+          className='input'
+          value={mngEmployeeState.personal_info.phone}
+          onChange={(e) => {
+            dispatch(
+              setMngEmployee({
+                ...mngEmployeeState,
+                personal_info: { 
+                  ...mngEmployeeState.personal_info,
+                  phone: e.target.value }
+              }))
+          }} />
+
+
+        <div>Tech Stack</div>
+        {techStackData.map((item) => {
+            if (item.status === 'ACTIVE') {
+              return (
+              <div key={item.name} >
+                <input 
+                  type='checkbox' 
+                  value={item.name}
+                  onChange={() => handleCheckbox(item.name)}
+                  checked={mngEmployeeState.techstack_info.includes(item.name)}/>
+                <div>{item.name}</div>
+              </div>
+              )
+            }
+
+            return ''
+          })}
+
+        <button
+          className='btn-add-prj'
+          onClick={handleSubmit}>
+          Add
+        </button>
+      </form>
+    </div>
   )
 }
 

@@ -1,13 +1,25 @@
-import { updateDoc, doc } from 'firebase/firestore';
-import React, { useContext } from 'react'
+import { updateDoc, doc, collection, getDocs } from 'firebase/firestore';
+import React, { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
-import { setTechStack } from '../../reducer/action';
+import { setTechStack, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
-function EditTechStack({afterChanges}) {
+function EditTechStack() {
     const [state, dispatch] = useContext(Context)
     const { techStackState } = state
+
+    const getTechStack = useCallback(async () => {
+        const teckStackCollectionRef = collection(db, "TechStack");
+        const data = await getDocs(teckStackCollectionRef);
+        const teckStackData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        dispatch(setTechStackData(teckStackData))
+    }, [dispatch])
+
+    const afterChanges = () => {
+        getTechStack()
+    }
 
     const redirect = useNavigate();
 

@@ -1,17 +1,17 @@
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
-import { setCustomerGroupData, setMngDepartmentData, setMngEmployeeData, setMngProject, setMngProjectData, setPrjStatusData, setPrjTypeData, setTechStackData } from '../../reducer/action';
+import { setCustomerGroupData, setMngDepartmentData, setMngEmployeeData, setMngProject, setMngProjectData, setPrjStatus, setPrjStatusData, setPrjType, setPrjTypeData, setTechStack, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
-function AddProject() {
+function EditProject() {
 
     const [state, dispatch] = useContext(Context)
 
     const [employeeList, setEmployeeList] = useState([])
 
-    const { mngProjectState, prjStatusData, prjTypeData, techStackData, customerGroupData, mngDepartmentData } = state
+    const { mngProjectState, prjStatusData, prjTypeData, techStackData, customerGroupData, mngDepartmentData, mngEmployeeData } = state
 
     const redirect = useNavigate()
 
@@ -115,7 +115,11 @@ function AddProject() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        await addDoc(mngProjectCollectionRef, mngProjectState)
+        const editDoc = doc(db, 'Project', mngProjectState.id)
+        const updated = mngProjectState
+        delete updated.id
+
+        await updateDoc(editDoc, updated)
 
         dispatch(setMngProject({
             name: '',
@@ -135,15 +139,15 @@ function AddProject() {
     return (
         <div className='CommonAddEdit'>
             <div className="title">
-                Add Project
+                Edit Project
             </div>
 
             <div className="div-form">
                 <form action="" className="">
 
                     <div>Name</div>
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         className=''
                         value={mngProjectState.name}
                         onChange={(e) => {
@@ -151,7 +155,7 @@ function AddProject() {
                                 ...mngProjectState,
                                 name: e.target.value
                             }))
-                        }}/>
+                        }} />
 
                     <div>Status</div>
                     {/*  use select */}
@@ -286,13 +290,9 @@ function AddProject() {
                         <option value="" disabled>Choose the customer</option>
 
                         {customerGroupData.map((item) => {
-                            if (item.status === 'ACTIVE'){
-                                return (
-                                    <option key={item.name} value={item.name}>{item.name}</option>
-                                )
-                            }
-
-                            return null
+                            return (
+                                <option key={item.name} value={item.name}>{item.name}</option>
+                            )
                         })}
                     </select>
 
@@ -306,4 +306,4 @@ function AddProject() {
     )
 }
 
-export default AddProject
+export default EditProject
