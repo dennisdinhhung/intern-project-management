@@ -1,4 +1,3 @@
-import React, { useContext } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './Login'
 import PrjType from './category/PrjType'
@@ -20,7 +19,6 @@ import EditTechStack from './edit_category/EditTechStack'
 import { AuthProvider } from '../utils/AuthProvider'
 import { RequireAuth } from '../utils/RequireAuth'
 import EditPrjStatus from './edit_category/EditPrjStatus'
-import Context from '../context/context'
 import EditCustomerGroup from './edit_category/EditCustomerGroup'
 import AddDepartment from './add_manage/AddDepartment'
 import AddEmployee from './add_manage/AddEmployee'
@@ -30,8 +28,6 @@ import AddProject from './add_manage/AddProject'
 import EditProject from './edit_manage/EditProject'
 
 function Container() {
-
-  const [state, dispatch] = useContext(Context);
 
   return (
     <AuthProvider>

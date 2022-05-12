@@ -1,8 +1,8 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
-import { setCustomerGroupData, setMngDepartmentData, setMngEmployeeData, setMngProject, setMngProjectData, setPrjStatus, setPrjStatusData, setPrjType, setPrjTypeData, setTechStack, setTechStackData } from '../../reducer/action';
+import { setCustomerGroupData, setMngDepartmentData, setMngEmployeeData, setMngProject, setMngProjectData, setPrjStatusData, setPrjTypeData, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
 function EditProject() {
@@ -11,7 +11,7 @@ function EditProject() {
 
     const [employeeList, setEmployeeList] = useState([])
 
-    const { mngProjectState, prjStatusData, prjTypeData, techStackData, customerGroupData, mngDepartmentData, mngEmployeeData } = state
+    const { mngProjectState, prjStatusData, prjTypeData, techStackData, customerGroupData, mngDepartmentData } = state
 
     const redirect = useNavigate()
 
@@ -109,8 +109,6 @@ function EditProject() {
             }
         })
     }
-
-    const mngProjectCollectionRef = collection(db, "Project");
 
     const handleSubmit = async (e) => {
         e.preventDefault()
