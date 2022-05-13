@@ -141,21 +141,22 @@ function AddProject() {
             <div className="div-form">
                 <form action="" className="">
 
-                    <div>Name</div>
-                    <input 
-                        type="text" 
-                        className=''
+                    <div className='input-title'>Name</div>
+                    <input
+                        type="text"
+                        className='input'
                         value={mngProjectState.name}
                         onChange={(e) => {
                             dispatch(setMngProject({
                                 ...mngProjectState,
                                 name: e.target.value
                             }))
-                        }}/>
+                        }} />
 
-                    <div>Status</div>
+                    <div className='input-title'>Status</div>
                     {/*  use select */}
                     <select
+                        className='input'
                         value={mngProjectState.status}
                         onChange={(e) => {
                             dispatch(
@@ -179,9 +180,10 @@ function AddProject() {
                         })}
                     </select>
 
-                    <div>Type</div>
+                    <div className='input-title'>Type</div>
 
                     <select
+                        className='input'
                         value={mngProjectState.type}
                         onChange={(e) => {
                             dispatch(
@@ -206,15 +208,16 @@ function AddProject() {
                     </select>
 
 
-                    <div>Tech Stack</div>
+                    <div className='input-title'>Tech Stack</div>
 
-                    <div>
+                    <div className='div-input-checkbox-section'>
                         {techStackData.map((item) => {
                             if (item.status === 'ACTIVE') {
                                 return (
                                     <div key={item.name} >
                                         <input
                                             type='checkbox'
+                                            className='input-checkbox'
                                             value={item.name}
                                             onChange={() => handleCheckboxTech(item.name)}
                                             checked={mngProjectState.techstack.includes(item.name)} />
@@ -228,9 +231,10 @@ function AddProject() {
                     </div>
 
 
-                    <div>Department</div>
+                    <div className='input-title'>Department</div>
 
                     <select
+                        className='input'
                         value={mngProjectState.department}
                         onChange={(e) => {
                             handleSetEmployeeList(e.target.value)
@@ -251,28 +255,34 @@ function AddProject() {
                         })}
                     </select>
 
-                    <div>Employee</div>
+                    <div className='input-title'>{employeeList.length ? 'Employee' : ''}</div>
                     {/*map the list of employees that belongs to the seleted department */}
 
                     {/* Once the Department is chosen, you should be able to see 
                 all members of said department, and select mulitple*/}
 
-                    {employeeList.map((item) => (
-                        <div key={item} >
-                            <input
-                                type='checkbox'
-                                value={item}
-                                onChange={() => handleCheckboxEmployee(item)}
-                                checked={mngProjectState.members.includes(item)} />
-                            <div>{item}</div>
-                        </div>
-                    ))}
+                    {employeeList.length ? (
+                    <div className="div-input-checkbox-section">
+                        {employeeList.map((item) => (
+                            <div key={item} >
+                                <input
+                                    type='checkbox'
+                                    className='input-checkbox'
+                                    value={item}
+                                    onChange={() => handleCheckboxEmployee(item)}
+                                    checked={mngProjectState.members.includes(item)} />
+                                <div>{item}</div>
+                            </div>
+                        ))}
+                    </div>) : ''}
+                    
 
 
 
-                    <div>Customer</div>
+                    <div className='input-title'>Customer</div>
 
                     <select
+                        className='input'
                         value={mngProjectState.customer}
                         onChange={(e) => {
                             dispatch(
@@ -286,7 +296,7 @@ function AddProject() {
                         <option value="" disabled>Choose the customer</option>
 
                         {customerGroupData.map((item) => {
-                            if (item.status === 'ACTIVE'){
+                            if (item.status === 'ACTIVE') {
                                 return (
                                     <option key={item.name} value={item.name}>{item.name}</option>
                                 )
@@ -297,6 +307,7 @@ function AddProject() {
                     </select>
 
                     <button
+                        className='btn-add-edit'
                         onClick={handleSubmit}>
                         Add
                     </button>

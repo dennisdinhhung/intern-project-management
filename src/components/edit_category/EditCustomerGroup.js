@@ -50,7 +50,7 @@ function EditCustomerGroup() {
 
 
     return (
-        <div className='AddProjectType Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Edit Customer Group
             </div>

@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import React, { useCallback, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
@@ -46,8 +46,6 @@ function EditDepartment() {
     }, [getTechStack, getMngEmployee])
 
     const redirect = useNavigate();
-
-    const CollectionRef = collection(db, "Department");
 
     const handleSubmit = async (e) => {
         e.preventDefault();

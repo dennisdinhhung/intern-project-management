@@ -100,7 +100,7 @@ function AddDepartment() {
             </div>
 
             <form action="">
-                <div>Name</div>
+                <div className='input-title'>Name</div>
                 <input
                     type="text"
                     className='input'
@@ -113,7 +113,7 @@ function AddDepartment() {
                             }))
                     }} />
 
-                <div>Function</div>
+                <div className='input-title'>Function</div>
                 <input
                     type="text"
                     className='input'
@@ -126,45 +126,48 @@ function AddDepartment() {
                             }))
                     }} />
 
-                <div>Tech Stack</div>
+                <div className='input-title'>Tech Stack</div>
 
-                {// TODO: Select from the list of tech stack
-                }
-                {techStackData.map((item) => {
-                    if (item.status === 'ACTIVE') {
+                <div className="div-input-checkbox-section">
+                    {techStackData.map((item) => {
+                        if (item.status === 'ACTIVE') {
+                            return (
+                                <div key={item.name} >
+                                    <input
+                                        type='checkbox'
+                                        className='input-checkbox'
+                                        value={item.name}
+                                        onChange={() => handleCheckboxTech(item.name)}
+                                        checked={mngDepartmentState.techstack.includes(item.name)} />
+                                    <div>{item.name}</div>
+                                </div>
+                            )
+                        }
+
+                        return ''
+                    })}
+                </div>
+
+                <div className='input-title'>Employee</div>
+
+                <div className="div-input-checkbox-section">
+                    {mngEmployeeData.map((item) => {
                         return (
-                            <div key={item.name} >
+                            <div key={item.personal_info.name} >
                                 <input
                                     type='checkbox'
-                                    value={item.name}
-                                    onChange={() => handleCheckboxTech(item.name)}
-                                    checked={mngDepartmentState.techstack.includes(item.name)} />
-                                <div>{item.name}</div>
+                                    className='input-checkbox'
+                                    value={item.personal_info.name}
+                                    onChange={() => handleCheckboxEmployee(item.personal_info.name)}
+                                    checked={mngDepartmentState.employee.includes(item.personal_info.name)} />
+                                <div>{item.personal_info.name}</div>
                             </div>
                         )
-                    }
-
-                    return ''
-                })}
-
-                <div>Employee</div>
-                {// TODO: Select from the list of employees
-                }
-                {mngEmployeeData.map((item) => {
-                    return (
-                        <div key={item.personal_info.name} >
-                            <input
-                                type='checkbox'
-                                value={item.personal_info.name}
-                                onChange={() => handleCheckboxEmployee(item.personal_info.name)}
-                                checked={mngDepartmentState.employee.includes(item.personal_info.name)} />
-                            <div>{item.personal_info.name}</div>
-                        </div>
-                    )
-                })}
+                    })}
+                </div>
 
                 <button
-                    className='btn-add'
+                    className='btn-add-edit'
                     onClick={handleSubmit}>
                     Add
                 </button>

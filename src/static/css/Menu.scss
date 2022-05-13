@@ -1,10 +1,12 @@
 .Menu{
     height: 100%;
-    width: 250px;
-
     background-color: var(--background-grey);
+    
+    // overflow-y: scroll;
+    // overflow-x: hidden;
 
     padding-top: 30px;
+    padding-bottom: auto;
 
     .title-menu{
         padding-left: 20px;

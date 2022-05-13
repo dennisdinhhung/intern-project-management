@@ -47,7 +47,7 @@ function EditTechStack() {
 
 
     return (
-        <div className='AddProjectType Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Edit Project Type
             </div>

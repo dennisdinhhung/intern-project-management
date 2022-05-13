@@ -45,16 +45,16 @@ function AddCustomerGroup() {
 
 
     return (
-        <div className='AddProjectType Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Add Customer Group
             </div>
 
             <form action="">
-                <div>Name</div>
+                <div className='input-title'>Name</div>
                 <input
                     type="text"
-                    className='input-name'
+                    className='input'
                     value={customerGroupState.name}
                     onChange={(e) => {
                         dispatch(
@@ -63,28 +63,27 @@ function AddCustomerGroup() {
                                 name: e.target.value }))
                     }} />
 
-                <div>Description</div>
+                <div className='input-title'>Description</div>
                 <input
                     type="text"
-                    className='input-desc'
+                    className='input'
                     value={customerGroupState.description}
                     onChange={(e) => {
                         dispatch(setCustomerGroup({ ...customerGroupState, description: e.target.value }))
                     }} />
 
-                <div>Priority Number</div>
+                <div className='input-title'>Priority Number</div>
                 <input
                     type='number'
-                    className='input-priority'
+                    className='input'
                     value={customerGroupState.priority}
                     onChange={(e) => {
                         dispatch(setCustomerGroup({ ...customerGroupState, priority: e.target.value }))
                     }} />
 
-                <div>Status</div>
+                <div className='input-title'>Status</div>
                 <select
-                    name=""
-                    id=""
+                    className='input'
                     value={customerGroupState.status}
                     onChange={(e) => {
                         dispatch(setCustomerGroup({ ...customerGroupState, status: e.target.value }))
@@ -95,7 +94,7 @@ function AddCustomerGroup() {
                 </select>
 
                 <button
-                    className='btn-add-prj'
+                    className='btn-add-edit'
                     onClick={handleSubmit}>
                     Add
                 </button>

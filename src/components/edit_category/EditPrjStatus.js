@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import React, { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
@@ -48,13 +48,13 @@ function EditPrjStatus() {
 
 
     return (
-        <div className='AddProjectType Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Edit Project Type
             </div>
 
             <form action="">
-                <div>Name</div>
+                <div className='input-title'>Name</div>
                 <input
                     type="text"
                     className='input-name'
@@ -66,7 +66,7 @@ function EditPrjStatus() {
                                 name: e.target.value }))
                     }} />
 
-                <div>Description</div>
+                <div className='input-title'>Description</div>
                 <input
                     type="text"
                     className='input-desc'
@@ -75,7 +75,7 @@ function EditPrjStatus() {
                         dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
                     }} />
 
-                <div>Status</div>
+                <div className='input-title'>Status</div>
                 <select
                     name=""
                     id=""

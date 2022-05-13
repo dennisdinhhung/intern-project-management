@@ -46,16 +46,16 @@ function AddPrjType() {
 
 
     return (
-        <div className='AddProjectType Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Add Project Type
             </div>
 
             <form action="">
-                <div>Name</div>
+                <div className='input-title'>Name</div>
                 <input
                     type="text"
-                    className='input-name'
+                    className='input'
                     value={prjTypeState.name}
                     onChange={(e) => {
                         dispatch(
@@ -64,28 +64,29 @@ function AddPrjType() {
                                 name: e.target.value }))
                     }} />
 
-                <div>Description</div>
+                <div className='input-title'>Description</div>
                 <input
                     type="text"
-                    className='input-desc'
+                    className='input'
                     value={prjTypeState.description}
                     onChange={(e) => {
                         dispatch(setPrjType({ ...prjTypeState, description: e.target.value }))
                     }} />
 
-                <div>Priority Number</div>
+                <div className='input-title'>Priority Number</div>
                 <input
                     type='number'
-                    className='input-priority'
+                    className='input'
                     value={prjTypeState.priority}
                     onChange={(e) => {
                         dispatch(setPrjType({ ...prjTypeState, priority: e.target.value }))
                     }} />
 
-                <div>Status</div>
+                <div className='input-title'>Status</div>
                 <select
                     name=""
                     id=""
+                    className='input'
                     value={prjTypeState.status}
                     onChange={(e) => {
                         dispatch(setPrjType({ ...prjTypeState, status: e.target.value }))
@@ -96,7 +97,7 @@ function AddPrjType() {
                 </select>
 
                 <button
-                    className='btn-add-prj'
+                    className='btn-add-edit'
                     onClick={handleSubmit}>
                     Add
                 </button>

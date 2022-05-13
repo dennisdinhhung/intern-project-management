@@ -45,34 +45,35 @@ function AddPrjStatus() {
     }
 
     return (
-        <div className='AddProjectStatus Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Add Project Status
             </div>
 
             <form action="">
-                <div>Name</div>
+                <div className='input-title'>Name</div>
                 <input
                     type="text"
-                    className='input-name'
+                    className='input'
                     value={prjStatusState.name}
                     onChange={(e) => {
                         dispatch(setPrjStatus({ ...prjStatusState, name: e.target.value }))
                     }} />
 
-                <div>Description</div>
+                <div className='input-title'>Description</div>
                 <input
                     type="text"
-                    className='input-desc'
+                    className='input'
                     value={prjStatusState.description}
                     onChange={(e) => {
                         dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
                     }} />
 
-                <div>Status</div>
+                <div className='input-title'>Status</div>
                 <select
                     name=""
                     id=""
+                    className='input'
                     value={prjStatusState.status}
                     onChange={(e) => {
                         dispatch(setPrjStatus({ ...prjStatusState, status: e.target.value }))
@@ -83,7 +84,7 @@ function AddPrjStatus() {
                 </select>
 
                 <button
-                    className='btn-add-prj'
+                    className='btn-add-edit'
                     onClick={handleSubmit}>
                     Add
                 </button>

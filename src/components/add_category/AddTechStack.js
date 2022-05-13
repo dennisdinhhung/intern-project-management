@@ -44,16 +44,16 @@ function AddTechStack() {
 
 
     return (
-        <div className='AddProjectType Common'>
+        <div className='CommonAddEdit'>
             <div className="title">
                 Add Tech Stack
             </div>
 
             <form action="">
-                <div>Name</div>
+                <div className='input-title'>Name</div>
                 <input
                     type="text"
-                    className='input-name'
+                    className='input'
                     value={techStackState.name}
                     onChange={(e) => {
                         dispatch(
@@ -62,19 +62,20 @@ function AddTechStack() {
                                 name: e.target.value }))
                     }} />
 
-                <div>Description</div>
+                <div className='input-title'>Description</div>
                 <input
                     type="text"
-                    className='input-desc'
+                    className='input'
                     value={techStackState.description}
                     onChange={(e) => {
                         dispatch(setTechStack({ ...techStackState, description: e.target.value }))
                     }} />
 
-                <div>Status</div>
+                <div className='input-title'>Status</div>
                 <select
                     name=""
                     id=""
+                    className='input'
                     value={techStackState.status}
                     onChange={(e) => {
                         dispatch(setTechStack({ ...techStackState, status: e.target.value }))
@@ -85,7 +86,7 @@ function AddTechStack() {
                 </select>
 
                 <button
-                    className='btn-add-prj'
+                    className='btn-add-edit'
                     onClick={handleSubmit}>
                     Add
                 </button>
