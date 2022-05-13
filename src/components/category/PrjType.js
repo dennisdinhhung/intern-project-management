@@ -53,6 +53,8 @@ function PrjType() {
                 newList.push(item.id)
             ))
 
+            console.log(newList.length, 'list')
+
             setIsCheckAll(true)
             setCheckboxList(newList)
         }
@@ -62,25 +64,22 @@ function PrjType() {
             const newList = []
             setCheckboxList(newList)
         }
+
+        
     }
 
-
-
-    const handleCheckbox = (id) => {
+    const handleCheckbox = async (id) => {
         //check if the id is in the list
         const isChecked = checkboxList.includes(id);
         const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
         setCheckboxList(checkboxListUpdate)
 
-        //! bug here
-        // if (prjTypeData.length === checkboxList.length){
-        //     setIsCheckAll(true)
-        //     console.log(isCheckAll, 1)
-        // }
-        // else if (prjTypeData.length !== checkboxList.length || checkboxList.length === 0){
-        //     setIsCheckAll(false)
-        //     console.log(isCheckAll, 2)
-        // }
+        if (prjTypeData.length === checkboxListUpdate.length){
+            setIsCheckAll(true)
+        }
+        else if (prjTypeData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
+            setIsCheckAll(false)
+        }
     }
 
     const handleEdit = () => {
@@ -144,8 +143,8 @@ function PrjType() {
                         <th>
                             <input
                                 type="checkbox"
-                                value={isCheckAll}
-                                onClick={handleCheckAll} />
+                                checked={isCheckAll}
+                                onChange={handleCheckAll} />
 
                         </th>
                         <th>Name</th>

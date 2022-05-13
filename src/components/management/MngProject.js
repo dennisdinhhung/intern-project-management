@@ -62,22 +62,20 @@ function MngProject() {
     }
   }
 
-  const handleCheckbox = (id) => {
+  const handleCheckbox = async (id) => {
     //check if the id is in the list
     const isChecked = checkboxList.includes(id);
     const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
     setCheckboxList(checkboxListUpdate)
 
-    //! bug here
-    // if (mngProjectData.length === checkboxList.length){
-    //     setIsCheckAll(true)
-    //     console.log(isCheckAll, 1)
-    // }
-    // else if (mngProjectData.length !== checkboxList.length || checkboxList.length === 0){
-    //     setIsCheckAll(false)
-    //     console.log(isCheckAll, 2)
-    // }
-  }
+    if (mngProjectData.length === checkboxListUpdate.length){
+        setIsCheckAll(true)
+    }
+    else if (mngProjectData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
+        setIsCheckAll(false)
+    }
+}
+
 
   const handleEdit = () => {
 
@@ -132,22 +130,21 @@ function MngProject() {
             <th>
               <input
                 type="checkbox"
-                value={isCheckAll}
-                onClick={handleCheckAll} />
+                checked={isCheckAll}
+                onChange={handleCheckAll} />
 
             </th>
             <th>Name</th>
             <th>Status</th>
             <th>Type</th>
             <th>Tech Stack</th>
-            <th>Department</th>
+            <th>Dept.</th>
             <th>Members</th>
             <th>Customer</th>
           </tr>
         </thead>
 
         <tbody>
-          {console.log(mngProjectData, 1)}
           {
             mngProjectData.map((row, index) => (
               <tr key={index}>

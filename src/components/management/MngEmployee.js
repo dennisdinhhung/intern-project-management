@@ -62,22 +62,20 @@ function MngEmployee() {
     }
   }
 
-  const handleCheckbox = (id) => {
+  const handleCheckbox = async (id) => {
     //check if the id is in the list
     const isChecked = checkboxList.includes(id);
     const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
     setCheckboxList(checkboxListUpdate)
 
-    //! bug here
-    // if (mngEmployeeData.length === checkboxList.length){
-    //     setIsCheckAll(true)
-    //     console.log(isCheckAll, 1)
-    // }
-    // else if (mngEmployeeData.length !== checkboxList.length || checkboxList.length === 0){
-    //     setIsCheckAll(false)
-    //     console.log(isCheckAll, 2)
-    // }
-  }
+    if (mngEmployeeData.length === checkboxListUpdate.length){
+        setIsCheckAll(true)
+    }
+    else if (mngEmployeeData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
+        setIsCheckAll(false)
+    }
+}
+
 
   const handleAdd = () => {
     //set value of add page to empty
@@ -146,8 +144,8 @@ function MngEmployee() {
             <th>
               <input
                 type="checkbox"
-                value={isCheckAll}
-                onClick={handleCheckAll} />
+                checked={isCheckAll}
+                onChange={handleCheckAll} />
 
             </th>
             <th>Name</th>

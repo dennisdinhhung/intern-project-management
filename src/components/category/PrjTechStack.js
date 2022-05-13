@@ -66,21 +66,18 @@ function PrjTechStack() {
 
 
 
-    const handleCheckbox = (id) => {
+    const handleCheckbox = async (id) => {
         //check if the id is in the list
         const isChecked = checkboxList.includes(id);
         const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
         setCheckboxList(checkboxListUpdate)
 
-        //! bug here
-        // if (techStackData.length === checkboxList.length){
-        //     setIsCheckAll(true)
-        //     console.log(isCheckAll, 1)
-        // }
-        // else if (techStackData.length !== checkboxList.length || checkboxList.length === 0){
-        //     setIsCheckAll(false)
-        //     console.log(isCheckAll, 2)
-        // }
+        if (techStackData.length === checkboxListUpdate.length){
+            setIsCheckAll(true)
+        }
+        else if (techStackData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
+            setIsCheckAll(false)
+        }
     }
 
     const handleEdit = () => {
@@ -144,8 +141,8 @@ function PrjTechStack() {
                         <th>
                             <input
                                 type="checkbox"
-                                value={isCheckAll}
-                                onClick={handleCheckAll} />
+                                checked={isCheckAll}
+                                onChange={handleCheckAll} />
 
                         </th>
                         <th>Name</th>
