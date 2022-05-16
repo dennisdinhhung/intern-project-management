@@ -181,7 +181,7 @@ function PrjStatus() {
       <div className="div-btns">
         <div>
           <button
-            className='button blue-btn'
+            className={`button ${checkboxList.length === 1 ? 'blue-btn' : 'disabled'}`}
             onClick={handleEdit}>
             <BsFillPencilFill className='icon' />
             Edit
@@ -190,10 +190,10 @@ function PrjStatus() {
 
         <div>
           <button
-            className='button blue-btn'
+            className={`button ${checkboxList.length < 1 ? 'disabled' : 'red-btn'}`}
             onClick={handleDelete}>
             <BsFillTrashFill className='icon' />
-            Delete
+            Delete{isCheckAll ? ' All' : ''}
           </button>
         </div>
       </div>

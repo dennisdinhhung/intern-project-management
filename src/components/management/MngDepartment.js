@@ -71,13 +71,13 @@ function MngDepartment() {
     const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
     setCheckboxList(checkboxListUpdate)
 
-    if (mngDepartmentData.length === checkboxListUpdate.length){
-        setIsCheckAll(true)
+    if (mngDepartmentData.length === checkboxListUpdate.length) {
+      setIsCheckAll(true)
     }
-    else if (mngDepartmentData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
-        setIsCheckAll(false)
+    else if (mngDepartmentData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0) {
+      setIsCheckAll(false)
     }
-}
+  }
 
 
   const handleEdit = () => {
@@ -109,7 +109,7 @@ function MngDepartment() {
 
     afterChanges()
   }
-  
+
   return (
     <div className='Common'>
       <div className="title">
@@ -181,7 +181,7 @@ function MngDepartment() {
       <div className="div-btns">
         <div>
           <button
-            className='button blue-btn'
+            className={`button ${checkboxList.length === 1 ? 'blue-btn' : 'disabled'}`}
             onClick={handleEdit}>
             <BsFillPencilFill className='icon' />
             Edit
@@ -190,10 +190,10 @@ function MngDepartment() {
 
         <div>
           <button
-            className='button blue-btn'
+            className={`button ${checkboxList.length < 1 ? 'disabled' : 'red-btn'}`}
             onClick={handleDelete}>
             <BsFillTrashFill className='icon' />
-            Delete
+            Delete{isCheckAll ? ' All' : ''}
           </button>
         </div>
       </div>

@@ -68,13 +68,13 @@ function MngProject() {
     const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
     setCheckboxList(checkboxListUpdate)
 
-    if (mngProjectData.length === checkboxListUpdate.length){
-        setIsCheckAll(true)
+    if (mngProjectData.length === checkboxListUpdate.length) {
+      setIsCheckAll(true)
     }
-    else if (mngProjectData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
-        setIsCheckAll(false)
+    else if (mngProjectData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0) {
+      setIsCheckAll(false)
     }
-}
+  }
 
 
   const handleEdit = () => {
@@ -160,13 +160,13 @@ function MngProject() {
                 <td>{row.status}</td>
                 <td>{row.type}</td>
                 <td>{row.techstack.map((item) => (
-                    <div key={item}>{item}</div>
-                  ))}
+                  <div key={item}>{item}</div>
+                ))}
                 </td>
                 <td>{row.department}</td>
                 <td>{row.members.map((item) => (
-                    <div key={item}>{item}</div>
-                  ))}
+                  <div key={item}>{item}</div>
+                ))}
                 </td>
                 <td>{row.customer}</td>
               </tr>
@@ -182,7 +182,7 @@ function MngProject() {
       <div className="div-btns">
         <div>
           <button
-            className='button blue-btn'
+            className={`button ${checkboxList.length === 1 ? 'blue-btn' : 'disabled'}`}
             onClick={handleEdit}>
             <BsFillPencilFill className='icon' />
             Edit
@@ -191,10 +191,10 @@ function MngProject() {
 
         <div>
           <button
-            className='button blue-btn'
+            className={`button ${checkboxList.length < 1 ? 'disabled' : 'red-btn'}`}
             onClick={handleDelete}>
             <BsFillTrashFill className='icon' />
-            Delete
+            Delete{isCheckAll ? ' All' : ''}
           </button>
         </div>
       </div>
