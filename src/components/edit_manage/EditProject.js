@@ -68,6 +68,16 @@ function EditProject() {
         dispatch(setMngEmployeeData(Datas))
     }, [dispatch])
 
+    const handleSetEmployeeList = useCallback((value) => {
+        // setEmployeeList(value)
+
+        mngDepartmentData.forEach((item) => {
+            if (item.name === value) {
+                setEmployeeList(item.employee)
+            }
+        })
+    }, [mngDepartmentData])
+
 
     useEffect(() => {
         getPrjStatus()
@@ -76,7 +86,8 @@ function EditProject() {
         getCustomer()
         getDepartment()
         getEmployee()
-    }, [getPrjStatus, getPrjType, getTechStack, getCustomer, getDepartment, getEmployee])
+        handleSetEmployeeList(mngProjectState.department)
+    }, [getPrjStatus, getPrjType, getTechStack, getCustomer, getDepartment, getEmployee, handleSetEmployeeList, mngProjectState.department])
 
     const handleCheckboxTech = (value) => {
         const isChecked = mngProjectState.techstack.includes(value)
@@ -98,16 +109,6 @@ function EditProject() {
             ...mngProjectState,
             members: checkboxListUpdate
         }))
-    }
-
-    const handleSetEmployeeList = (value) => {
-        // setEmployeeList(value)
-
-        mngDepartmentData.forEach((item) => {
-            if (item.name === value) {
-                setEmployeeList(item.employee)
-            }
-        })
     }
 
     const handleSubmit = async (e) => {
@@ -143,10 +144,10 @@ function EditProject() {
             <div className="div-form">
                 <form action="" className="">
 
-                    <div>Name</div>
+                    <div className='input-title'>Name</div>
                     <input
                         type="text"
-                        className=''
+                        className='input'
                         value={mngProjectState.name}
                         onChange={(e) => {
                             dispatch(setMngProject({
@@ -155,9 +156,10 @@ function EditProject() {
                             }))
                         }} />
 
-                    <div>Status</div>
+                    <div className='input-title'>Status</div>
                     {/*  use select */}
                     <select
+                        className='input'
                         value={mngProjectState.status}
                         onChange={(e) => {
                             dispatch(
@@ -181,9 +183,10 @@ function EditProject() {
                         })}
                     </select>
 
-                    <div>Type</div>
+                    <div className='input-title'>Type</div>
 
                     <select
+                        className='input'
                         value={mngProjectState.type}
                         onChange={(e) => {
                             dispatch(
@@ -208,9 +211,9 @@ function EditProject() {
                     </select>
 
 
-                    <div>Tech Stack</div>
+                    <div className='input-title'>Tech Stack</div>
 
-                    <div>
+                    <div className="div-input-checkbox-section">
                         {techStackData.map((item) => {
                             if (item.status === 'ACTIVE') {
                                 return (
@@ -230,9 +233,10 @@ function EditProject() {
                     </div>
 
 
-                    <div>Department</div>
+                    <div className='input-title'>Department</div>
 
                     <select
+                        className='input'
                         value={mngProjectState.department}
                         onChange={(e) => {
                             handleSetEmployeeList(e.target.value)
@@ -253,28 +257,33 @@ function EditProject() {
                         })}
                     </select>
 
-                    <div>Employee</div>
+                    <div className='input-title'>{employeeList.length ? 'Employee' : ''}</div>
                     {/*map the list of employees that belongs to the seleted department */}
 
                     {/* Once the Department is chosen, you should be able to see 
                 all members of said department, and select mulitple*/}
 
-                    {employeeList.map((item) => (
-                        <div key={item} >
-                            <input
-                                type='checkbox'
-                                value={item}
-                                onChange={() => handleCheckboxEmployee(item)}
-                                checked={mngProjectState.members.includes(item)} />
-                            <div>{item}</div>
-                        </div>
-                    ))}
+                {employeeList.length ? (
+                    <div className="div-input-checkbox-section">
+                        {employeeList.map((item) => (
+                            <div key={item} >
+                                <input
+                                    type='checkbox'
+                                    className='input-checkbox'
+                                    value={item}
+                                    onChange={() => handleCheckboxEmployee(item)}
+                                    checked={mngProjectState.members.includes(item)} />
+                                <div>{item}</div>
+                            </div>
+                        ))}
+                    </div>) : ''}
 
 
 
-                    <div>Customer</div>
+                    <div className='input-title'>Customer</div>
 
                     <select
+                        className='input'
                         value={mngProjectState.customer}
                         onChange={(e) => {
                             dispatch(
@@ -295,6 +304,7 @@ function EditProject() {
                     </select>
 
                     <button
+                    className='btn-add-edit'
                         onClick={handleSubmit}>
                         Add
                     </button>

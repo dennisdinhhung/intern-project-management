@@ -57,7 +57,7 @@ function EditPrjStatus() {
                 <div className='input-title'>Name</div>
                 <input
                     type="text"
-                    className='input-name'
+                    className='input'
                     value={prjStatusState.name}
                     onChange={(e) => {
                         dispatch(
@@ -69,7 +69,7 @@ function EditPrjStatus() {
                 <div className='input-title'>Description</div>
                 <input
                     type="text"
-                    className='input-desc'
+                    className='input'
                     value={prjStatusState.description}
                     onChange={(e) => {
                         dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
@@ -77,8 +77,7 @@ function EditPrjStatus() {
 
                 <div className='input-title'>Status</div>
                 <select
-                    name=""
-                    id=""
+                    className='input'
                     value={prjStatusState.status}
                     onChange={(e) => {
                         dispatch(setPrjStatus({ ...prjStatusState, status: e.target.value }))
@@ -89,7 +88,7 @@ function EditPrjStatus() {
                 </select>
 
                 <button
-                    className='btn-add-prj'
+                    className='btn-add-edit'
                     onClick={handleSubmit}>
                     Edit
                 </button>
