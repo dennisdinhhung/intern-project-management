@@ -7,7 +7,7 @@
     background-color: var(--main-white);
     width: 100%;
 
-    position: sticky;
+    position: fixed;
     z-index: 2;
 
     .title-navbar{
@@ -93,11 +93,20 @@
         // transform: translateX(55%);
 
         button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
             border: none;
             background-color: #FFFFFF;
             width: 100%;
             height: 50px;
             margin-top: 10px;
+
+            svg{
+                font-size: 20px;
+                margin-right: 10px;
+            }
 
             &:hover{
                 background-color: var(--background-grey);

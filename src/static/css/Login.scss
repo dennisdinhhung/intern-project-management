@@ -55,6 +55,20 @@
                 border: 2px solid var(--main-blue);
             }
 
+            .div-input-icon{
+                position: relative;
+
+                .icon-eye{
+                    position: absolute;
+                    top: 28%;
+                    right: 20px;
+
+                    font-size: 24px;
+
+                    color: var(--main-blue);
+                }
+            }
+
             .btn-login{
                 margin-right: auto;
                 margin-left: auto;

@@ -1,10 +1,10 @@
 .Common {
     padding: 26px;
+    margin-left: 250px;
 
-    display: flex;
-    flex-direction: column;
-
-    width: 100%;
+    
+    // display: flex;
+    // flex-direction: column;
 
     &>* {
         margin-bottom: 10px;
@@ -19,7 +19,8 @@
     }
 
     .div-btn-add {
-        margin-left: auto;
+        margin-right: auto;
+        margin-left: 0;
     }
 
     .blue-btn {
@@ -124,6 +125,10 @@
             padding: 1rem 2rem;
         }
 
+        tbody > tr:hover{
+            background-color: var(--selected-grey);
+        }
+
         input {
             width: 15px;
             height: 15px;
@@ -133,7 +138,11 @@
             text-align: center;
         }
 
-        .priority {
+        .divider{
+           margin-bottom: 5px;
+        }
+
+        .center {
             text-align: center;
         }
 
@@ -152,12 +161,13 @@
             background-color: #ffcdd2;
             color: #c62828;
         }
-    }
 
-    tr:nth-child(even) {
-        background-color: #f4f6fb;
+        tr:nth-child(even) {
+            background-color: #fbfcff;
+        }
+    
     }
-
+    
     .div-btns {
         display: flex;
     }
