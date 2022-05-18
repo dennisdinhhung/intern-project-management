@@ -13,6 +13,8 @@ import { setMngProject, setMngProjectData } from '../../reducer/action';
 function MngProject() {
   const [state, dispatch] = useContext(Context);
 
+  const [error, setError] = useState({})
+
   const [checkboxList, setCheckboxList] = useState([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [errorEdit, setErrorEdit] = useState();
@@ -117,6 +119,16 @@ function MngProject() {
         <button
           className='button btn-add'
           onClick={() => {
+            dispatch(setMngProject({
+              name: '',
+              status: '',
+              type: '',
+              techstack: [],
+              department: '',
+              members: [],
+              customer: ''
+            }))
+
             redirect('add')
           }}>
           <BsPlusLg className='icon' />

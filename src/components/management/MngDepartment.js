@@ -128,6 +128,14 @@ function MngDepartment() {
         <button
           className='button btn-add'
           onClick={() => {
+            dispatch(setMngDepartment({
+              name: '',
+              function: '',
+              employee: [],
+              project: [],
+              techstack: []
+            }))
+
             redirect('add')
           }}>
           <BsPlusLg className='icon' />
@@ -171,7 +179,7 @@ function MngDepartment() {
                   <div key={item}>{item}</div>
                 ))}</td>
                 <td>{mngProjectData.map((item) => {
-                  if (item.department === row.name){
+                  if (item.department === row.name) {
                     return <div key={item.name}>{item.name}</div>
                   }
 

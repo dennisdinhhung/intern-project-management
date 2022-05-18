@@ -35,7 +35,7 @@ function CustomerGroup() {
     const afterChanges = () => {
         getCustomerGroup()
     }
-    
+
     const redirect = useNavigate();
 
     const handleCheckAll = () => {
@@ -72,10 +72,10 @@ function CustomerGroup() {
         const checkboxListUpdate = isChecked ? checkboxList.filter(item => item !== id) : [...checkboxList, id]
         setCheckboxList(checkboxListUpdate)
 
-        if (customerGroupData.length === checkboxListUpdate.length){
+        if (customerGroupData.length === checkboxListUpdate.length) {
             setIsCheckAll(true)
         }
-        else if (customerGroupData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0){
+        else if (customerGroupData.length !== checkboxListUpdate.length || checkboxListUpdate.length === 0) {
             setIsCheckAll(false)
         }
     }
@@ -129,6 +129,13 @@ function CustomerGroup() {
                 <button
                     className='button btn-add'
                     onClick={() => {
+                        dispatch(setCustomerGroup({
+                            name: '',
+                            description: '',
+                            priority: '',
+                            status: ''
+                        }))
+
                         redirect('add')
                     }}>
                     <BsPlusLg className='icon' />

@@ -128,6 +128,12 @@ function PrjTechStack() {
                 <button
                     className='button btn-add'
                     onClick={() => {
+                        dispatch(setTechStack({
+                            name: '',
+                            description: '',
+                            status: ''
+                        }))
+                        
                         redirect('add')
                     }}>
                     <BsPlusLg className='icon' />

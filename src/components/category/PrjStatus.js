@@ -126,6 +126,14 @@ function PrjStatus() {
         <button
           className='button btn-add'
           onClick={() => {
+            dispatch(
+              setPrjStatus({
+                  name: '',
+                  description: '',
+                  priority: '',
+                  status: ''
+            }))
+
             redirect('add')
           }}>
           <BsPlusLg className='icon' />

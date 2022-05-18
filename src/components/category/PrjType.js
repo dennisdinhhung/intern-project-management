@@ -130,6 +130,12 @@ function PrjType() {
                 <button
                     className='button btn-add'
                     onClick={() => {
+                        dispatch(setPrjType({
+                            name: '',
+                            description: '',
+                            priority: '',
+                            status: ''
+                        }))
                         redirect('add')
                     }}>
                     <BsPlusLg className='icon' />

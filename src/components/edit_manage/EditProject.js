@@ -68,16 +68,13 @@ function EditProject() {
         dispatch(setMngEmployeeData(Datas))
     }, [dispatch])
 
-    const handleSetEmployeeList = useCallback((value) => {
-        // setEmployeeList(value)
-
+    const handleSetEmployeeListOnMount = useCallback((value) => {
         mngDepartmentData.forEach((item) => {
             if (item.name === value) {
                 setEmployeeList(item.employee)
             }
         })
     }, [mngDepartmentData])
-
 
     useEffect(() => {
         getPrjStatus()
@@ -86,9 +83,39 @@ function EditProject() {
         getCustomer()
         getDepartment()
         getEmployee()
-        handleSetEmployeeList(mngProjectState.department)
-    }, [getPrjStatus, getPrjType, getTechStack, getCustomer, getDepartment, getEmployee, handleSetEmployeeList, mngProjectState.department])
+        handleSetEmployeeListOnMount(mngProjectState.department)
+    }, [])
 
+    //!bug: employee list gets reset on mount
+    // useEffect(() => {
+    //     const resetMembers = []
+    //     dispatch(setMngProject({
+    //         ...mngProjectState,
+    //         members: resetMembers
+    //     }))
+    // }, [mngProjectState.department])
+
+    const resetEmployeeList = () => {
+        const resetMembers = []
+        dispatch(setMngProject({
+            ...mngProjectState,
+            members: resetMembers
+        }))
+    }
+
+    const handleSetEmployeeList = (value) => {
+        resetEmployeeList()
+
+        mngDepartmentData.forEach((item) => {
+            if (item.name === value) {
+                setEmployeeList(item.employee)
+            }
+        })
+
+        console.log(mngProjectState.members)
+    }
+
+    
     const handleCheckboxTech = (value) => {
         const isChecked = mngProjectState.techstack.includes(value)
 
@@ -100,10 +127,10 @@ function EditProject() {
         }))
     }
 
-    const handleCheckboxEmployee = (value) => {
-        const isChecked = mngProjectState.members.includes(value)
+    const handleCheckboxEmployee = (name, id) => {
+        const isChecked = mngProjectState.members.some(info => info.personal_id === id)
 
-        const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item !== value) : [...mngProjectState.members, value]
+        const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item.personal_id !== id) : [...mngProjectState.members, { name: name, personal_id: id }]
 
         dispatch(setMngProject({
             ...mngProjectState,
@@ -263,20 +290,20 @@ function EditProject() {
                     {/* Once the Department is chosen, you should be able to see 
                 all members of said department, and select mulitple*/}
 
-                {employeeList.length ? (
-                    <div className="div-input-checkbox-section">
-                        {employeeList.map((item) => (
-                            <div key={item} >
-                                <input
-                                    type='checkbox'
-                                    className='input-checkbox'
-                                    value={item}
-                                    onChange={() => handleCheckboxEmployee(item)}
-                                    checked={mngProjectState.members.includes(item)} />
-                                <div>{item}</div>
-                            </div>
-                        ))}
-                    </div>) : ''}
+                    {employeeList.length ? (
+                        <div className="div-input-checkbox-section">
+                            {employeeList.map((item) => (
+                                <div key={item.id} >
+                                    <input
+                                        type='checkbox'
+                                        className='input-checkbox'
+                                        value={item.name}
+                                        onChange={() => handleCheckboxEmployee(item.name, item.personal_id)}
+                                        checked={mngProjectState.members.some(info => info.personal_id === item.personal_id)} />
+                                    <div>{item.name + ': ' + item.personal_id}</div>
+                                </div>
+                            ))}
+                        </div>) : ''}
 
 
 
@@ -304,9 +331,9 @@ function EditProject() {
                     </select>
 
                     <button
-                    className='btn-add-edit'
+                        className='btn-add-edit'
                         onClick={handleSubmit}>
-                        Add
+                        Edit
                     </button>
                 </form>
             </div>
