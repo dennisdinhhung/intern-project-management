@@ -26,6 +26,7 @@ import EditEmployee from './edit_manage/EditEmployee'
 import EditDepartment from './edit_manage/EditDepartment'
 import AddProject from './add_manage/AddProject'
 import EditProject from './edit_manage/EditProject'
+import Profile from '../context/Profile'
 
 function Container() {
 
@@ -33,6 +34,8 @@ function Container() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* //TODO: change routing for login and home  
+          */}
           <Route path='/' element={<Login />} />
           <Route path='/home' element={
             <RequireAuth>
@@ -41,6 +44,8 @@ function Container() {
             </RequireAuth>
           }>
             <Route index element={<Home />} />
+
+            <Route path='profile' element={<Profile/>}/>
 
             {//* PROJECT-TYPE
             }
