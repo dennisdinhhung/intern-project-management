@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../static/css/NavBar.scss'
@@ -14,19 +14,32 @@ function NavBar() {
 
   const { authUser } = useAuth();
 
+  const profileRef = useRef();
+
+  useEffect(() => {
+    // click outside function
+    let handler = (event) => {
+      if (!profileRef.current.contains(event.target)){
+        setDropDown(false)
+      }
+    }
+
+    document.addEventListener("click", handler)
+
+    return () => {
+      document.removeEventListener("click", handler)
+    }
+  })
+
   return (
     <div className='NavBar'>
       <div className="title-navbar">
         NotJira
       </div>
 
-      <input
-        type="text"
-        className='input-search'
-        placeholder='Search' />
-
       <div
         className="div-user-menu"
+        ref={profileRef}
         >
         <button
           className={`btn-profile ${dropDown ? 'profile-active' : 'profile-inactive'}`}
@@ -62,7 +75,9 @@ function ProfileDropDown() {
 
   return (
     <div className='profile-drop-down'>
-      <button>
+      <button
+        onClick={() => redirect('profile')}
+      >
         <BsFillPersonFill/>
         My Profile
       </button>
