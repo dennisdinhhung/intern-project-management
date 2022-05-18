@@ -4,7 +4,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthProvider';
 
 import '../static/css/Login.scss'
-import {BsFillEyeFill, BsFillEyeSlashFill} from 'react-icons/bs'
+import { BsEye, BsEyeSlash } from 'react-icons/bs'
 
 function Login() {
 
@@ -13,14 +13,20 @@ function Login() {
     password: ''
   });
 
+  const [isPasswordVisible, setIsPassswordVisible] = useState(false)
+
   const [errorLogin, setErrorLogin] = useState();
 
   const redirect = useNavigate();
 
   const { authUser, login } = useAuth();
 
-  if (authUser){
-    return <Navigate to='/home'/>
+  if (authUser) {
+    return <Navigate to='/home' />
+  }
+
+  const changePasswordVisibility = () => {
+    setIsPassswordVisible(!isPasswordVisible)
   }
 
   const handleSubmit = async (e) => {
@@ -42,43 +48,52 @@ function Login() {
       console.log('redirect')
       redirect('/home')
     }
-    catch(error){
+    catch (error) {
       setErrorLogin('Your username or password is incorrect.')
     }
   }
 
   return (
     <div className='Login'>
-        <div className="title-login">
-          NotJira
-        </div>
+      <div className="title-login">
+        NotJira
+      </div>
 
-        <div className="div-form">
-          <form action="" className='form-login'>
-            <input 
-              type="text" 
-              placeholder='Username'
-              onChange={(e) => {
-                setLoginInfo({...loginInfo, username: e.target.value})}}
-              value={loginInfo.username}/>
-            
-            <input 
-              type="text" 
+      <div className="div-form">
+        <form action="" className='form-login'>
+          <input
+            type="text"
+            placeholder='Username'
+            onChange={(e) => {
+              setLoginInfo({ ...loginInfo, username: e.target.value })
+            }}
+            value={loginInfo.username} />
+
+          <div className="div-input-icon">
+            <input
+              type={isPasswordVisible ? "text" : "password"}
               placeholder='Password'
               onChange={(e) => {
-                setLoginInfo({...loginInfo, password: e.target.value})
+                setLoginInfo({ ...loginInfo, password: e.target.value })
               }}
-              value={loginInfo.password}/>
+              value={loginInfo.password} />
 
-            <div className='error-login'>{errorLogin}</div>
+            <div
+              className='icon-eye'
+              onClick={changePasswordVisibility}>
+              {isPasswordVisible ? <BsEye /> : <BsEyeSlash />}
+            </div>
+          </div>
 
-            <button 
-              className='btn-login'
-              onClick={handleSubmit}>
-                Login
-            </button>
-          </form>
-        </div>
+          <div className='error-login'>{errorLogin}</div>
+
+          <button
+            className='btn-login'
+            onClick={handleSubmit}>
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
