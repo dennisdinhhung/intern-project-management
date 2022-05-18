@@ -33,7 +33,6 @@ export const initialState = {
         name: '',
         function: '',
         employee: [],
-        project: [],
         techstack: []
     },
     mngDepartmentData: [],
@@ -45,7 +44,6 @@ export const initialState = {
             dob: '',
             phone: ''
         },
-        project_participated: [],
         techstack_info: []
     },
     mngEmployeeData: [],
