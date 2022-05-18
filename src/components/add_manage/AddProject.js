@@ -78,6 +78,14 @@ function AddProject() {
         getEmployee()
     }, [getPrjStatus, getPrjType, getTechStack, getCustomer, getDepartment, getEmployee])
 
+    useEffect(() => {
+        const resetMembers = []
+        dispatch(setMngProject({
+            ...mngProjectState,
+            members: resetMembers
+        }))
+    }, [mngProjectState.department])
+
     const handleCheckboxTech = (value) => {
         const isChecked = mngProjectState.techstack.includes(value)
 
@@ -89,10 +97,10 @@ function AddProject() {
         }))
     }
 
-    const handleCheckboxEmployee = (value) => {
-        const isChecked = mngProjectState.members.includes(value)
+    const handleCheckboxEmployee = (name, id) => {
+        const isChecked = mngProjectState.members.some(info => info.personal_id === id)
 
-        const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item !== value) : [...mngProjectState.members, value]
+        const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item.personal_id !== id) : [...mngProjectState.members, {name: name, personal_id: id}]
 
         dispatch(setMngProject({
             ...mngProjectState,
@@ -101,7 +109,7 @@ function AddProject() {
     }
 
     const handleSetEmployeeList = (value) => {
-        // setEmployeeList(value)
+        console.log(mngProjectState, 'members')
 
         mngDepartmentData.forEach((item) => {
             if (item.name === value) {
@@ -116,6 +124,8 @@ function AddProject() {
         e.preventDefault()
 
         await addDoc(mngProjectCollectionRef, mngProjectState)
+
+        // TODO: add project info into Dep table and Emp table
 
         dispatch(setMngProject({
             name: '',
@@ -264,14 +274,14 @@ function AddProject() {
                     {employeeList.length ? (
                     <div className="div-input-checkbox-section">
                         {employeeList.map((item) => (
-                            <div key={item} >
+                            <div key={item.id} >
                                 <input
                                     type='checkbox'
                                     className='input-checkbox'
-                                    value={item}
-                                    onChange={() => handleCheckboxEmployee(item)}
-                                    checked={mngProjectState.members.includes(item)} />
-                                <div>{item}</div>
+                                    value={item.name}
+                                    onChange={() => handleCheckboxEmployee(item.name, item.personal_id)}
+                                    checked={mngProjectState.members.some(info => info.personal_id === item.personal_id)} />
+                                <div>{item.name + ': ' + item.personal_id}</div>
                             </div>
                         ))}
                     </div>) : ''}
