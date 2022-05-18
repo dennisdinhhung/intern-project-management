@@ -1,14 +1,17 @@
 import { addDoc, collection, getDocs } from 'firebase/firestore';
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/CommonAddEdit.scss'
 import { setMngEmployee, setMngEmployeeData, setTechStackData } from '../../reducer/action';
+import Validate from '../Validate';
 
 function AddEmployee() {
   const [state, dispatch] = useContext(Context)
+
+  const [error, setError] = useState({})
 
   const { mngEmployeeState, mngEmployeeData, techStackData } = state
 
@@ -43,6 +46,13 @@ function AddEmployee() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validation = Validate(mngEmployeeState);
+
+    if (Object.values(validation).some(item => item)) {
+      setError(validation);
+      return;
+    }
 
     //find the largest id in the array
     let lastEntry = 0
@@ -105,6 +115,8 @@ function AddEmployee() {
           }}
         />
 
+<div className="error">{error.personal_info?.name}</div>
+
         <div className='input-title'>Date of Birth</div>
         <input
           type="date"
@@ -122,6 +134,7 @@ function AddEmployee() {
           }}
         />
 
+<div className="error">{error.personal_info?.dob}</div>
 
         <div className='input-title'>Phone Number</div>
         <input
@@ -140,6 +153,7 @@ function AddEmployee() {
           }}
         />
 
+<div className="error">{error.personal_info?.phone}</div>
 
         <div className='input-title'>Tech Stack</div>
         <div className="div-input-checkbox-section">
@@ -161,6 +175,8 @@ function AddEmployee() {
             return ''
           })}
         </div>
+
+<div className="error">{error.techstack_info}</div>
 
         <button
           className='btn-add-edit'

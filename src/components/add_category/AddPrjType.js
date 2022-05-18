@@ -1,13 +1,16 @@
 import { addDoc, collection, getDocs } from 'firebase/firestore';
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
 import { setPrjType, setPrjTypeData } from '../../reducer/action';
+import Validate from '../Validate';
 
 function AddPrjType() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
 
     const { prjTypeState } = state
 
@@ -30,8 +33,15 @@ function AddPrjType() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const validation = Validate(prjTypeState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
+
         await addDoc(prjtypeCollectionRef, prjTypeState)
-        
+
         dispatch(setPrjType({
             name: '',
             description: '',
@@ -59,10 +69,13 @@ function AddPrjType() {
                     value={prjTypeState.name}
                     onChange={(e) => {
                         dispatch(
-                            setPrjType({ 
-                                ...prjTypeState, 
-                                name: e.target.value }))
+                            setPrjType({
+                                ...prjTypeState,
+                                name: e.target.value
+                            }))
                     }} />
+
+                <div className="error">{error.name}</div>
 
                 <div className='input-title'>Description</div>
                 <input
@@ -73,6 +86,8 @@ function AddPrjType() {
                         dispatch(setPrjType({ ...prjTypeState, description: e.target.value }))
                     }} />
 
+                <div className="error">{error.description}</div>
+
                 <div className='input-title'>Priority Number</div>
                 <input
                     type='number'
@@ -81,6 +96,8 @@ function AddPrjType() {
                     onChange={(e) => {
                         dispatch(setPrjType({ ...prjTypeState, priority: e.target.value }))
                     }} />
+
+                <div className="error">{error.priority}</div>
 
                 <div className='input-title'>Status</div>
                 <select
@@ -95,6 +112,8 @@ function AddPrjType() {
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
+
+                <div className="error">{error.status}</div>
 
                 <button
                     className='btn-add-edit'

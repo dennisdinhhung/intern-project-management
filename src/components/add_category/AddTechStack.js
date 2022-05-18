@@ -1,12 +1,16 @@
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import React, { useCallback, useContext } from 'react'
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { setTechStack, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
+import Validate from '../Validate';
 
 function AddTechStack() {
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
 
     const { techStackState } = state
 
@@ -29,8 +33,15 @@ function AddTechStack() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const validation = Validate(techStackState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
+
         await addDoc(techStackCollectionRef, techStackState)
-        
+
         dispatch(setTechStack({
             name: '',
             description: '',
@@ -57,10 +68,13 @@ function AddTechStack() {
                     value={techStackState.name}
                     onChange={(e) => {
                         dispatch(
-                            setTechStack({ 
-                                ...techStackState, 
-                                name: e.target.value }))
+                            setTechStack({
+                                ...techStackState,
+                                name: e.target.value
+                            }))
                     }} />
+
+                <div className="error">{error.name}</div>
 
                 <div className='input-title'>Description</div>
                 <input
@@ -70,6 +84,8 @@ function AddTechStack() {
                     onChange={(e) => {
                         dispatch(setTechStack({ ...techStackState, description: e.target.value }))
                     }} />
+
+                <div className="error">{error.description}</div>
 
                 <div className='input-title'>Status</div>
                 <select
@@ -84,6 +100,8 @@ function AddTechStack() {
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
+
+                <div className="error">{error.status}</div>
 
                 <button
                     className='btn-add-edit'

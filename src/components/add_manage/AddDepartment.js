@@ -6,10 +6,14 @@ import { setMngDepartment, setMngDepartmentData, setMngEmployeeData, setTechStac
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/CommonAddEdit.scss'
+import { useState } from 'react';
+import Validate from '../Validate';
 
 function AddDepartment() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
 
     const { mngDepartmentState, techStackData, mngEmployeeData } = state
 
@@ -52,6 +56,13 @@ function AddDepartment() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const validation = Validate(mngDepartmentState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
+
         await addDoc(CollectionRef, mngDepartmentState)
 
         dispatch(setMngDepartment({
@@ -81,7 +92,7 @@ function AddDepartment() {
     const handleCheckboxEmployee = (name, id) => {
         const isChecked = mngDepartmentState.employee.some(info => info.personal_id === id)
 
-        const checkboxListUpdate = isChecked ? mngDepartmentState.employee.filter(item => item.personal_id !== id) : [...mngDepartmentState.employee, {name: name, personal_id: id}]
+        const checkboxListUpdate = isChecked ? mngDepartmentState.employee.filter(item => item.personal_id !== id) : [...mngDepartmentState.employee, { name: name, personal_id: id }]
         dispatch(setMngDepartment({
             ...mngDepartmentState,
             employee: checkboxListUpdate
@@ -111,6 +122,8 @@ function AddDepartment() {
                             }))
                     }} />
 
+                <div className="error">{error.name}</div>
+
                 <div className='input-title'>Function</div>
                 <input
                     type="text"
@@ -123,6 +136,8 @@ function AddDepartment() {
                                 function: e.target.value
                             }))
                     }} />
+
+                <div className="error">{error.function}</div>
 
                 <div className='input-title'>Tech Stack</div>
 
@@ -146,6 +161,8 @@ function AddDepartment() {
                     })}
                 </div>
 
+                <div className="error">{error.techstack}</div>
+
                 <div className='input-title'>Employee</div>
 
                 {/* {console.log(mngDepartmentState.employee, 0)} */}
@@ -164,6 +181,8 @@ function AddDepartment() {
                         )
                     })}
                 </div>
+
+                <div className="error">{error.employee}</div>
 
                 <button
                     className='btn-add-edit'

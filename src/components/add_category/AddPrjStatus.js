@@ -1,13 +1,17 @@
 import { addDoc, collection, getDocs } from 'firebase/firestore';
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
 import { setPrjStatus, setPrjStatusData } from '../../reducer/action';
+import Validate from '../Validate';
 
 function AddPrjStatus() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
+
     const { prjStatusState } = state
 
     const getPrjStatus = useCallback(async () => {
@@ -28,6 +32,13 @@ function AddPrjStatus() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const validation = Validate(prjStatusState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
 
         await addDoc(prjstatusCollectionRef, prjStatusState)
 
@@ -60,6 +71,8 @@ function AddPrjStatus() {
                         dispatch(setPrjStatus({ ...prjStatusState, name: e.target.value }))
                     }} />
 
+                <div className="error">{error.name}</div>
+
                 <div className='input-title'>Description</div>
                 <input
                     type="text"
@@ -68,6 +81,8 @@ function AddPrjStatus() {
                     onChange={(e) => {
                         dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
                     }} />
+
+                <div className="error">{error.description}</div>
 
                 <div className='input-title'>Status</div>
                 <select
@@ -82,6 +97,8 @@ function AddPrjStatus() {
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
+
+                <div className="error">{error.status}</div>
 
                 <button
                     className='btn-add-edit'

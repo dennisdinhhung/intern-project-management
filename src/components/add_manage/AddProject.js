@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { setCustomerGroupData, setMngDepartmentData, setMngEmployeeData, setMngProject, setMngProjectData, setPrjStatusData, setPrjTypeData, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
+import Validate from '../Validate';
 
 function AddProject() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
 
     const [employeeList, setEmployeeList] = useState([])
 
@@ -123,9 +126,14 @@ function AddProject() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        await addDoc(mngProjectCollectionRef, mngProjectState)
+        const validation = Validate(mngProjectState);
 
-        // TODO: add project info into Dep table and Emp table
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
+
+        await addDoc(mngProjectCollectionRef, mngProjectState)
 
         dispatch(setMngProject({
             name: '',
@@ -163,6 +171,8 @@ function AddProject() {
                             }))
                         }} />
 
+<div className="error">{error.name}</div>
+
                     <div className='input-title'>Status</div>
                     {/*  use select */}
                     <select
@@ -189,6 +199,8 @@ function AddProject() {
                             return ''
                         })}
                     </select>
+
+<div className="error">{error.status}</div>
 
                     <div className='input-title'>Type</div>
 
@@ -217,6 +229,8 @@ function AddProject() {
                         })}
                     </select>
 
+<div className="error">{error.type}</div>
+
 
                     <div className='input-title'>Tech Stack</div>
 
@@ -239,6 +253,8 @@ function AddProject() {
                             return null
                         })}
                     </div>
+
+<div className="error">{error.techstack}</div>
 
 
                     <div className='input-title'>Department</div>
@@ -265,6 +281,8 @@ function AddProject() {
                         })}
                     </select>
 
+<div className="error">{error.department}</div>
+
                     <div className='input-title'>{employeeList.length ? 'Employee' : ''}</div>
                     {/*map the list of employees that belongs to the seleted department */}
 
@@ -286,7 +304,7 @@ function AddProject() {
                         ))}
                     </div>) : ''}
                     
-
+<div className="error">{employeeList.length ? error.members : ''}</div>
 
 
                     <div className='input-title'>Customer</div>
@@ -315,6 +333,8 @@ function AddProject() {
                             return null
                         })}
                     </select>
+
+<div className="error">{error.customer}</div>
 
                     <button
                         className='btn-add-edit'
