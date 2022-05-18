@@ -9,7 +9,7 @@ import Context from '../../context/context';
 
 import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
 
-import { setMngDepartment, setMngDepartmentData } from '../../reducer/action';
+import { setMngDepartment, setMngDepartmentData, setMngProjectData } from '../../reducer/action';
 
 function MngDepartment() {
 
@@ -19,7 +19,7 @@ function MngDepartment() {
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [errorEdit, setErrorEdit] = useState();
 
-  const { mngDepartmentData } = state
+  const { mngDepartmentData, mngProjectData } = state
 
   const getMngDepartment = useCallback(async () => {
     const mngDepartmentCollectionRef = collection(db, "Department");
@@ -29,9 +29,17 @@ function MngDepartment() {
     dispatch(setMngDepartmentData(mngDepartmentData))
   }, [dispatch])
 
+  const getMngProject = useCallback(async () => {
+    const CollectionRef = collection(db, "Project");
+    const data = await getDocs(CollectionRef);
+    const Data = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    dispatch(setMngProjectData(Data))
+  }, [dispatch])
+
   useEffect(() => {
     getMngDepartment()
-  }, [getMngDepartment])
+    getMngProject()
+  }, [getMngDepartment, getMngProject])
 
   const afterChanges = () => {
     getMngDepartment()
@@ -162,11 +170,15 @@ function MngDepartment() {
                 <td>{row.techstack.map((item) => (
                   <div key={item}>{item}</div>
                 ))}</td>
-                <td>{row.project.map((item) => (
-                  <div key={item}>{item}</div>
-                ))}</td>
+                <td>{mngProjectData.map((item) => {
+                  if (item.department === row.name){
+                    return <div key={item.name}>{item.name}</div>
+                  }
+
+                  return null
+                })}</td>
                 <td>{row.employee.map((item) => (
-                  <div key={item}>{item}</div>
+                  <div key={item.personal_id}>{item.name + ': ' + item.personal_id}</div>
                 ))}</td>
               </tr>
             ))

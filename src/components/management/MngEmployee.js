@@ -8,7 +8,7 @@ import '../../static/css/OutletCommonChild.scss'
 import Context from '../../context/context';
 
 import { BsFillPencilFill, BsFillTrashFill, BsPlusLg } from 'react-icons/bs'
-import { setMngEmployee, setMngEmployeeData } from '../../reducer/action';
+import { setMngEmployee, setMngEmployeeData, setMngProjectData } from '../../reducer/action';
 
 function MngEmployee() {
   const [state, dispatch] = useContext(Context);
@@ -17,7 +17,7 @@ function MngEmployee() {
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [errorEdit, setErrorEdit] = useState();
 
-  const { mngEmployeeData } = state
+  const { mngEmployeeData, mngProjectData } = state
 
   const getMngEmployee = useCallback(async () => {
     const mngEmployeeCollectionRef = collection(db, "Employee");
@@ -26,9 +26,17 @@ function MngEmployee() {
     dispatch(setMngEmployeeData(mngEmployeeData))
   }, [dispatch])
 
+  const getMngProject = useCallback(async () => {
+    const CollectionRef = collection(db, "Project");
+    const data = await getDocs(CollectionRef);
+    const Data = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    dispatch(setMngProjectData(Data))
+  }, [dispatch])
+
   useEffect(() => {
     getMngEmployee()
-  }, [getMngEmployee])
+    getMngProject()
+  }, [])
 
   const afterChanges = () => {
     getMngEmployee()
@@ -170,12 +178,23 @@ function MngEmployee() {
                   />
                 </td>
                 <td>{row.personal_info.name}</td>
-                <td>{row.personal_info.dob}</td>
-                <td>{row.personal_info.phone}</td>
-                <td>{row.personal_id}</td>
-                <td>{row.project_participated.map((item) => (
-                  <div key={item}>{item}</div>
-                ))}</td>
+                <td className='center'>{row.personal_info.dob}</td>
+                <td className='center'>{row.personal_info.phone}</td>
+                <td className='center'>{row.personal_id}</td>
+
+                <td>{mngProjectData.map((item) => (
+                  <div key={item.id} className='divider'>
+                    {item.members.map((info) => {
+                      if (row.personal_info.name === info.name) {
+                        return item.name
+                      }
+
+                      return null
+                    })}
+                  </div>
+                ))}
+                </td>
+
                 <td>
                   {row.techstack_info.map((item) => (
                     <div key={item}>{item}</div>
