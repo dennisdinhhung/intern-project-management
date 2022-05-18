@@ -78,12 +78,10 @@ function AddDepartment() {
         }))
     }
 
-    const handleCheckboxEmployee = (value) => {
-        console.log(value, 0)
-        const isChecked = mngDepartmentState.employee.includes(value)
+    const handleCheckboxEmployee = (name, id) => {
+        const isChecked = mngDepartmentState.employee.some(info => info.personal_id === id)
 
-        const checkboxListUpdate = isChecked ? mngDepartmentState.employee.filter(item => item !== value) : [...mngDepartmentState.employee, value]
-        console.log(checkboxListUpdate, 1)
+        const checkboxListUpdate = isChecked ? mngDepartmentState.employee.filter(item => item.personal_id !== id) : [...mngDepartmentState.employee, {name: name, personal_id: id}]
         dispatch(setMngDepartment({
             ...mngDepartmentState,
             employee: checkboxListUpdate
@@ -150,6 +148,7 @@ function AddDepartment() {
 
                 <div className='input-title'>Employee</div>
 
+                {/* {console.log(mngDepartmentState.employee, 0)} */}
                 <div className="div-input-checkbox-section">
                     {mngEmployeeData.map((item) => {
                         return (
@@ -158,9 +157,9 @@ function AddDepartment() {
                                     type='checkbox'
                                     className='input-checkbox'
                                     value={item.personal_info.name}
-                                    onChange={() => handleCheckboxEmployee(item.personal_info.name)}
-                                    checked={mngDepartmentState.employee.includes(item.personal_info.name)} />
-                                <div>{item.personal_info.name}</div>
+                                    onChange={() => handleCheckboxEmployee(item.personal_info.name, item.personal_id)}
+                                    checked={mngDepartmentState.employee.some(info => info.personal_id === item.personal_id)} />
+                                <div>{item.personal_info.name + ' (id: ' + item.personal_id + ')'}</div>
                             </div>
                         )
                     })}

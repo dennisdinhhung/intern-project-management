@@ -80,12 +80,10 @@ function EditDepartment() {
         }))
     }
 
-    const handleCheckboxEmployee = (value) => {
-        console.log(value, 0)
-        const isChecked = mngDepartmentState.employee.includes(value)
+    const handleCheckboxEmployee = (name, id) => {
+        const isChecked = mngDepartmentState.employee.some(info => info.personal_id === id)
 
-        const checkboxListUpdate = isChecked ? mngDepartmentState.employee.filter(item => item !== value) : [...mngDepartmentState.employee, value]
-        console.log(checkboxListUpdate, 1)
+        const checkboxListUpdate = isChecked ? mngDepartmentState.employee.filter(item => item.personal_id !== id) : [...mngDepartmentState.employee, {name: name, personal_id: id}]
         dispatch(setMngDepartment({
             ...mngDepartmentState,
             employee: checkboxListUpdate
@@ -98,7 +96,7 @@ function EditDepartment() {
     return (
         <div className='CommonAddEdit'>
             <div className="title">
-                Add Department
+                Edit Department
             </div>
 
             <form action="">
@@ -160,9 +158,9 @@ function EditDepartment() {
                                     type='checkbox'
                                     className='input-checkbox'
                                     value={item.personal_info.name}
-                                    onChange={() => handleCheckboxEmployee(item.personal_info.name)}
-                                    checked={mngDepartmentState.employee.includes(item.personal_info.name)} />
-                                <div>{item.personal_info.name}</div>
+                                    onChange={() => handleCheckboxEmployee(item.personal_info.name, item.personal_id)}
+                                    checked={mngDepartmentState.employee.some(info => info.personal_id === item.personal_id)} />
+                                <div>{item.personal_info.name + ' (id: ' + item.personal_id + ')'}</div>
                             </div>
                         )
                     })}

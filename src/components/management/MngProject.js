@@ -139,8 +139,8 @@ function MngProject() {
             <th>Type</th>
             <th>Tech Stack</th>
             <th>Dept.</th>
-            <th>Members</th>
             <th>Customer</th>
+            <th>Members</th>
           </tr>
         </thead>
 
@@ -164,11 +164,11 @@ function MngProject() {
                 ))}
                 </td>
                 <td>{row.department}</td>
+                <td>{row.customer}</td>
                 <td>{row.members.map((item) => (
-                  <div key={item}>{item}</div>
+                  <div key={item.personal_id}>{item.name + ': ' + item.personal_id}</div>
                 ))}
                 </td>
-                <td>{row.customer}</td>
               </tr>
             ))
           }

@@ -168,7 +168,7 @@ function PrjType() {
                                 </td>
                                 <td>{row.name}</td>
                                 <td>{row.description}</td>
-                                <td className='priority'>{row.priority}</td>
+                                <td className='center'>{row.priority}</td>
                                 <td>
                                     <div className={`status ${statusClass(row.status)}`}>
                                         {row.status}
