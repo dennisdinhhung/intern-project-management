@@ -130,7 +130,6 @@ function PrjStatus() {
               setPrjStatus({
                   name: '',
                   description: '',
-                  priority: '',
                   status: ''
             }))
 

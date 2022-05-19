@@ -2,35 +2,42 @@ export default function Validate(obj){
     console.log(obj, 0)
 
     let error = {
-        name: '',
-        description: '',
-        priority: '',
-        status: '',
+        // name: '',
+        // description: '',
+        // priority: '',
+        // status: '',
 
-        function: '',
-        personal_info: {
-            name: '',
-            dob: '',
-            phone: ''
-        },
+        // function: '',
+        // personal_info: {
+        //     name: '',
+        //     dob: '',
+        //     phone: ''
+        // },
 
-        employee: '',
-        techstack: '',
-        techstack_info: '',
+        // employee: '',
+        // techstack: '',
+        // techstack_info: '',
 
-        type: '',
-        department: '',
-        members: '',
-        customer: ''
+        // type: '',
+        // department: '',
+        // members: '',
+        // customer: ''
     };
+    
+    if (obj.personal_info){
+        error = {
+            personal_info: {
+                name: '',
+                dob: '',
+                phone: ''
+            }
+        }
+    }
 
 
     //* NAME
     if (obj.name !== undefined){
         error.name = Validate.isRequired(obj.name, 'Please enter the name.');
-        if (obj.name !== ''){
-            error.name = Validate.isName(obj.name);
-        }
     }
 
     //* personal info name
@@ -111,6 +118,16 @@ export default function Validate(obj){
     if(obj.customer !== undefined){
         error.customer = Validate.isRequired(obj.customer, 'Please choose an option')
     }
+
+    //! preventative bug fixing
+    if (error.personal_info?.name === null && error.personal_info?.dob === null && error.personal_info?.phone === null){
+        error.personal_info = null
+
+        console.log(error.personal_info, 'test')
+    }
+    
+    console.log(obj, 'obj')
+    console.log(error, 'error')
 
     return error;
 }

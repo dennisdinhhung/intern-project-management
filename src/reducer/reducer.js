@@ -38,7 +38,6 @@ export const initialState = {
     mngDepartmentData: [],
 
     mngEmployeeState: {
-        personal_id: '',
         personal_info: {
             name: '',
             dob: '',
