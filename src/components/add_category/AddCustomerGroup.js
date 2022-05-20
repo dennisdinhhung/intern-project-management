@@ -97,7 +97,7 @@ function AddCustomerGroup() {
                         dispatch(setCustomerGroup({ ...customerGroupState, priority: e.target.value }))
                     }} />
 
-                <div className="error">{error.description}</div>
+                <div className="error">{error.priority}</div>
 
                 <div className='input-title'>Status</div>
                 <select

@@ -1,28 +1,6 @@
 export default function Validate(obj){
-    console.log(obj, 0)
 
-    let error = {
-        // name: '',
-        // description: '',
-        // priority: '',
-        // status: '',
-
-        // function: '',
-        // personal_info: {
-        //     name: '',
-        //     dob: '',
-        //     phone: ''
-        // },
-
-        // employee: '',
-        // techstack: '',
-        // techstack_info: '',
-
-        // type: '',
-        // department: '',
-        // members: '',
-        // customer: ''
-    };
+    let error = {};
     
     if (obj.personal_info){
         error = {
@@ -125,9 +103,6 @@ export default function Validate(obj){
 
         console.log(error.personal_info, 'test')
     }
-    
-    console.log(obj, 'obj')
-    console.log(error, 'error')
 
     return error;
 }
