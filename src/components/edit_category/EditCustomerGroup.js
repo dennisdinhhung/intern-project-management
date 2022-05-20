@@ -1,12 +1,16 @@
 import { updateDoc, doc, collection, getDocs } from 'firebase/firestore';
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { setCustomerGroup, setCustomerGroupData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
+import Validate from '../Validate';
 
 function EditCustomerGroup() {
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
+
     const { customerGroupState } = state
 
     const getCustomerGroup = useCallback(async () => {
@@ -25,6 +29,13 @@ function EditCustomerGroup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const validation = Validate(customerGroupState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
 
         //get the specific prjType doc
         const editDoc = doc(db, 'CustomerGroup', customerGroupState.id)
@@ -63,10 +74,13 @@ function EditCustomerGroup() {
                     value={customerGroupState.name}
                     onChange={(e) => {
                         dispatch(
-                            setCustomerGroup({ 
-                                ...customerGroupState, 
-                                name: e.target.value }))
+                            setCustomerGroup({
+                                ...customerGroupState,
+                                name: e.target.value
+                            }))
                     }} />
+
+                <div className="error">{error.name}</div>
 
                 <div className='input-title'>Description</div>
                 <input
@@ -77,6 +91,8 @@ function EditCustomerGroup() {
                         dispatch(setCustomerGroup({ ...customerGroupState, description: e.target.value }))
                     }} />
 
+                <div className="error">{error.description}</div>
+
                 <div className='input-title'>Priority Number</div>
                 <input
                     type='number'
@@ -85,6 +101,8 @@ function EditCustomerGroup() {
                     onChange={(e) => {
                         dispatch(setCustomerGroup({ ...customerGroupState, priority: e.target.value }))
                     }} />
+
+                <div className="error">{error.priority}</div>
 
                 <div className='input-title'>Status</div>
                 <select
@@ -97,6 +115,8 @@ function EditCustomerGroup() {
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
+
+                <div className="error">{error.status}</div>
 
                 <button
                     className='btn-add-edit'
