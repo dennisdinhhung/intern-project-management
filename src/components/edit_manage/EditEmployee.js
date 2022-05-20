@@ -1,14 +1,17 @@
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/CommonAddEdit.scss'
 import { setMngEmployee, setMngEmployeeData, setTechStackData } from '../../reducer/action';
+import Validate from '../Validate';
 
 function EditEmployee() {
   const [state, dispatch] = useContext(Context)
+
+  const [error, setError] = useState({})
 
   const { mngEmployeeState, techStackData } = state
 
@@ -43,6 +46,13 @@ function EditEmployee() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validation = Validate(mngEmployeeState);
+
+    if (Object.values(validation).some(item => item)) {
+      setError(validation);
+      return;
+    }
 
     const editDoc = doc(db, 'Employee', mngEmployeeState.id)
     const updated = mngEmployeeState
@@ -79,10 +89,13 @@ function EditEmployee() {
 
   return (
     <div className='CommonAddEdit'>
+
       <div className="title">
         Edit Employee
       </div>
+
       <form action="">
+
         <div className='input-title'>Name</div>
         <input
           type="text"
@@ -99,6 +112,8 @@ function EditEmployee() {
               }))
           }} />
 
+        <div className="error">{error.personal_info?.name}</div>
+
         <div className='input-title'>Date of Birth</div>
         <input
           type="date"
@@ -114,6 +129,10 @@ function EditEmployee() {
                 }
               }))
           }} />
+
+        <div className="error">{error.personal_info?.dob}</div>
+
+
         <div className='input-title'>Phone Number</div>
         <input
           type='text'
@@ -129,6 +148,8 @@ function EditEmployee() {
                 }
               }))
           }} />
+
+        <div className="error">{error.personal_info?.phone}</div>
 
 
         <div className='input-title'>Tech Stack</div>
@@ -152,11 +173,14 @@ function EditEmployee() {
           })}
         </div>
 
+        <div className="error">{error.techstack_info}</div>
+
         <button
           className='btn-add-edit'
           onClick={handleSubmit}>
           Edit
         </button>
+
       </form>
     </div>
   )

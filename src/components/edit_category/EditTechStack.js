@@ -1,12 +1,16 @@
 import { updateDoc, doc, collection, getDocs } from 'firebase/firestore';
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { setTechStack, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
+import Validate from '../Validate';
 
 function EditTechStack() {
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
+
     const { techStackState } = state
 
     const getTechStack = useCallback(async () => {
@@ -25,6 +29,13 @@ function EditTechStack() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const validation = Validate(techStackState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
 
         //get the specific prjType doc
         const editDoc = doc(db, 'TechStack', techStackState.id)
@@ -53,17 +64,20 @@ function EditTechStack() {
             </div>
 
             <form action="">
-                <div className='input-title'>Name</div>
+            <div className='input-title'>Name</div>
                 <input
                     type="text"
                     className='input'
                     value={techStackState.name}
                     onChange={(e) => {
                         dispatch(
-                            setTechStack({ 
-                                ...techStackState, 
-                                name: e.target.value }))
+                            setTechStack({
+                                ...techStackState,
+                                name: e.target.value
+                            }))
                     }} />
+
+                <div className="error">{error.name}</div>
 
                 <div className='input-title'>Description</div>
                 <input
@@ -74,8 +88,12 @@ function EditTechStack() {
                         dispatch(setTechStack({ ...techStackState, description: e.target.value }))
                     }} />
 
+                <div className="error">{error.description}</div>
+
                 <div className='input-title'>Status</div>
                 <select
+                    name=""
+                    id=""
                     className='input'
                     value={techStackState.status}
                     onChange={(e) => {
@@ -86,6 +104,8 @@ function EditTechStack() {
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
 
+                <div className="error">{error.status}</div>
+                
                 <button
                     className='btn-add-edit'
                     onClick={handleSubmit}>

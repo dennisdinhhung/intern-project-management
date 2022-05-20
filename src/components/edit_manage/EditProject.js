@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { setCustomerGroupData, setMngDepartmentData, setMngEmployeeData, setMngProject, setMngProjectData, setPrjStatusData, setPrjTypeData, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
+import Validate from '../Validate';
 
 function EditProject() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
 
     const [employeeList, setEmployeeList] = useState([])
 
@@ -87,51 +90,52 @@ function EditProject() {
     }, [])
 
     //!bug: employee list gets reset on mount
-    // useEffect(() => {
-    //     const resetMembers = []
-    //     dispatch(setMngProject({
-    //         ...mngProjectState,
-    //         members: resetMembers
-    //     }))
-    // }, [mngProjectState.department])
-
-    const resetEmployeeList = () => {
+    useEffect(() => {
         const resetMembers = []
         dispatch(setMngProject({
             ...mngProjectState,
             members: resetMembers
         }))
+    }, [mngProjectState.department])
+
+    const resetEmployeeList = () => {
+        handleSetEmployeeList(false)
+        const resetMembers = []
+        dispatch(setMngProject({
+            ...mngProjectState,
+            members: []
+        }))
     }
 
     const handleSetEmployeeList = (value) => {
-        resetEmployeeList()
 
         mngDepartmentData.forEach((item) => {
             if (item.name === value) {
                 setEmployeeList(item.employee)
             }
         })
-
-        console.log(mngProjectState.members)
     }
 
-    
+
     const handleCheckboxTech = (value) => {
         const isChecked = mngProjectState.techstack.includes(value)
 
         const checkboxListUpdate = isChecked ? mngProjectState.techstack.filter(item => item !== value) : [...mngProjectState.techstack, value]
-
+        console.log(mngProjectState, 'test')
         dispatch(setMngProject({
             ...mngProjectState,
             techstack: checkboxListUpdate
         }))
     }
 
+
+    //! check this again 
     const handleCheckboxEmployee = (name, id) => {
         const isChecked = mngProjectState.members.some(info => info.personal_id === id)
 
         const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item.personal_id !== id) : [...mngProjectState.members, { name: name, personal_id: id }]
 
+        console.log(mngProjectState, 'test')
         dispatch(setMngProject({
             ...mngProjectState,
             members: checkboxListUpdate
@@ -141,12 +145,19 @@ function EditProject() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const validation = Validate(mngProjectState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
+
         const editDoc = doc(db, 'Project', mngProjectState.id)
         const updated = mngProjectState
         delete updated.id
 
         await updateDoc(editDoc, updated)
-
+        console.log(mngProjectState, 'test')
         dispatch(setMngProject({
             name: '',
             status: '',
@@ -183,6 +194,8 @@ function EditProject() {
                             }))
                         }} />
 
+                    <div className="error">{error.name}</div>
+
                     <div className='input-title'>Status</div>
                     {/*  use select */}
                     <select
@@ -209,6 +222,8 @@ function EditProject() {
                             return ''
                         })}
                     </select>
+
+                    <div className="error">{error.status}</div>
 
                     <div className='input-title'>Type</div>
 
@@ -237,6 +252,8 @@ function EditProject() {
                         })}
                     </select>
 
+                    <div className="error">{error.type}</div>
+
 
                     <div className='input-title'>Tech Stack</div>
 
@@ -259,6 +276,8 @@ function EditProject() {
                         })}
                     </div>
 
+                    <div className="error">{error.techstack}</div>
+
 
                     <div className='input-title'>Department</div>
 
@@ -266,7 +285,10 @@ function EditProject() {
                         className='input'
                         value={mngProjectState.department}
                         onChange={(e) => {
+                            resetEmployeeList()
+                            
                             handleSetEmployeeList(e.target.value)
+                            
                             dispatch(
                                 setMngProject(
                                     {
@@ -283,6 +305,8 @@ function EditProject() {
                             )
                         })}
                     </select>
+
+                    <div className="error">{error.department}</div>
 
                     <div className='input-title'>{employeeList.length ? 'Employee' : ''}</div>
                     {/*map the list of employees that belongs to the seleted department */}
@@ -304,6 +328,8 @@ function EditProject() {
                                 </div>
                             ))}
                         </div>) : ''}
+
+                    <div className="error">{employeeList.length ? error.members : ''}</div>
 
 
 
@@ -329,6 +355,8 @@ function EditProject() {
                             )
                         })}
                     </select>
+
+                    <div className="error">{error.customer}</div>
 
                     <button
                         className='btn-add-edit'

@@ -1,13 +1,17 @@
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { db } from '../../utils/firebase-config';
 import { setPrjStatus, setPrjStatusData } from '../../reducer/action';
+import Validate from '../Validate';
 
 function EditPrjStatus() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
+
     const { prjStatusState } = state
 
     const getPrjStatus = useCallback(async () => {
@@ -26,6 +30,13 @@ function EditPrjStatus() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const validation = Validate(prjStatusState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
 
         //get the specific prjType doc
         const editDoc = doc(db, 'PrjStatus', prjStatusState.id)
@@ -50,7 +61,7 @@ function EditPrjStatus() {
     return (
         <div className='CommonAddEdit'>
             <div className="title">
-                Edit Project Type
+                Edit Project Status
             </div>
 
             <form action="">
@@ -60,11 +71,10 @@ function EditPrjStatus() {
                     className='input'
                     value={prjStatusState.name}
                     onChange={(e) => {
-                        dispatch(
-                            setPrjStatus({ 
-                                ...prjStatusState, 
-                                name: e.target.value }))
+                        dispatch(setPrjStatus({ ...prjStatusState, name: e.target.value }))
                     }} />
+
+                <div className="error">{error.name}</div>
 
                 <div className='input-title'>Description</div>
                 <input
@@ -75,8 +85,12 @@ function EditPrjStatus() {
                         dispatch(setPrjStatus({ ...prjStatusState, description: e.target.value }))
                     }} />
 
+                <div className="error">{error.description}</div>
+
                 <div className='input-title'>Status</div>
                 <select
+                    name=""
+                    id=""
                     className='input'
                     value={prjStatusState.status}
                     onChange={(e) => {
@@ -86,6 +100,8 @@ function EditPrjStatus() {
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
+
+                <div className="error">{error.status}</div>
 
                 <button
                     className='btn-add-edit'

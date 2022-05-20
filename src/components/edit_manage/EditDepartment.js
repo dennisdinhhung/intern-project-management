@@ -1,15 +1,18 @@
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Context from '../../context/context';
 import { setMngDepartment, setMngDepartmentData, setMngEmployeeData, setTechStackData } from '../../reducer/action';
 import { db } from '../../utils/firebase-config';
 
 import '../../static/css/CommonAddEdit.scss'
+import Validate from '../Validate';
 
 function EditDepartment() {
 
     const [state, dispatch] = useContext(Context)
+
+    const [error, setError] = useState({})
 
     const { mngDepartmentState, techStackData, mngEmployeeData } = state
 
@@ -49,6 +52,13 @@ function EditDepartment() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const validation = Validate(mngDepartmentState);
+
+        if (Object.values(validation).some(item => item)) {
+            setError(validation);
+            return;
+        }
 
         const editDoc = doc(db, 'Department', mngDepartmentState.id)
         const updated = mngDepartmentState
@@ -113,6 +123,9 @@ function EditDepartment() {
                             }))
                     }} />
 
+<div className="error">{error.name}</div>
+
+
                 <div className='input-title'>Function</div>
                 <input
                     type="text"
@@ -125,6 +138,8 @@ function EditDepartment() {
                                 function: e.target.value
                             }))
                     }} />
+
+<div className="error">{error.function}</div>
 
                 <div className='input-title'>Tech Stack</div>
 
@@ -149,6 +164,8 @@ function EditDepartment() {
                     })}
                 </div>
 
+                <div className="error">{error.techstack}</div>
+
                 <div className='input-title'>Employee</div>
                 <div className="div-input-checkbox-section">
                     {mngEmployeeData.map((item) => {
@@ -165,6 +182,8 @@ function EditDepartment() {
                         )
                     })}
                 </div>
+
+                <div className="error">{error.employee}</div>
 
                 <button
                     className='btn-add-edit'
