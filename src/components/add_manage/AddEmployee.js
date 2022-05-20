@@ -94,9 +94,11 @@ function AddEmployee() {
 
   return (
     <div className='CommonAddEdit'>
+      
       <div className="title">
         Add Employee
       </div>
+      
       <form action="">
         <div className='input-title'>Name</div>
         <input

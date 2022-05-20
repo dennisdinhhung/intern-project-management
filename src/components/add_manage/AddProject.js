@@ -103,7 +103,7 @@ function AddProject() {
     const handleCheckboxEmployee = (name, id) => {
         const isChecked = mngProjectState.members.some(info => info.personal_id === id)
 
-        const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item.personal_id !== id) : [...mngProjectState.members, {name: name, personal_id: id}]
+        const checkboxListUpdate = isChecked ? mngProjectState.members.filter(item => item.personal_id !== id) : [...mngProjectState.members, { name: name, personal_id: id }]
 
         dispatch(setMngProject({
             ...mngProjectState,
@@ -171,7 +171,7 @@ function AddProject() {
                             }))
                         }} />
 
-<div className="error">{error.name}</div>
+                    <div className="error">{error.name}</div>
 
                     <div className='input-title'>Status</div>
                     {/*  use select */}
@@ -200,7 +200,7 @@ function AddProject() {
                         })}
                     </select>
 
-<div className="error">{error.status}</div>
+                    <div className="error">{error.status}</div>
 
                     <div className='input-title'>Type</div>
 
@@ -229,7 +229,7 @@ function AddProject() {
                         })}
                     </select>
 
-<div className="error">{error.type}</div>
+                    <div className="error">{error.type}</div>
 
 
                     <div className='input-title'>Tech Stack</div>
@@ -254,7 +254,7 @@ function AddProject() {
                         })}
                     </div>
 
-<div className="error">{error.techstack}</div>
+                    <div className="error">{error.techstack}</div>
 
 
                     <div className='input-title'>Department</div>
@@ -281,7 +281,7 @@ function AddProject() {
                         })}
                     </select>
 
-<div className="error">{error.department}</div>
+                    <div className="error">{error.department}</div>
 
                     <div className='input-title'>{employeeList.length ? 'Employee' : ''}</div>
                     {/*map the list of employees that belongs to the seleted department */}
@@ -290,21 +290,21 @@ function AddProject() {
                 all members of said department, and select mulitple*/}
 
                     {employeeList.length ? (
-                    <div className="div-input-checkbox-section">
-                        {employeeList.map((item) => (
-                            <div key={item.id} >
-                                <input
-                                    type='checkbox'
-                                    className='input-checkbox'
-                                    value={item.name}
-                                    onChange={() => handleCheckboxEmployee(item.name, item.personal_id)}
-                                    checked={mngProjectState.members.some(info => info.personal_id === item.personal_id)} />
-                                <div>{item.name + ': ' + item.personal_id}</div>
-                            </div>
-                        ))}
-                    </div>) : ''}
-                    
-<div className="error">{employeeList.length ? error.members : ''}</div>
+                        <div className="div-input-checkbox-section">
+                            {employeeList.map((item) => (
+                                <div key={item.id} >
+                                    <input
+                                        type='checkbox'
+                                        className='input-checkbox'
+                                        value={item.name}
+                                        onChange={() => handleCheckboxEmployee(item.name, item.personal_id)}
+                                        checked={mngProjectState.members.some(info => info.personal_id === item.personal_id)} />
+                                    <div>{item.name + ': ' + item.personal_id}</div>
+                                </div>
+                            ))}
+                        </div>) : ''}
+
+                    <div className="error">{employeeList.length ? error.members : ''}</div>
 
 
                     <div className='input-title'>Customer</div>
@@ -334,7 +334,7 @@ function AddProject() {
                         })}
                     </select>
 
-<div className="error">{error.customer}</div>
+                    <div className="error">{error.customer}</div>
 
                     <button
                         className='btn-add-edit'
